@@ -19,6 +19,7 @@
   "homepage": "https://github.com/sbittmann/filterdb#readme",
   "dependencies": {
     "acorn": "^8.0.5",
-    "level-rocksdb": "^4.0.0"
+    "level-rocksdb": "^4.0.0",
+    "uuid": "^8.3.2"
   }
 }
