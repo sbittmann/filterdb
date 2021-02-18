@@ -1,0 +1,24 @@
+{
+  "name": "filterdb",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sbittmann/filterdb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sbittmann/filterdb/issues"
+  },
+  "homepage": "https://github.com/sbittmann/filterdb#readme",
+  "dependencies": {
+    "acorn": "^8.0.5",
+    "level-rocksdb": "^4.0.0"
+  }
+}
