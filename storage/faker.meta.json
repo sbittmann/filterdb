@@ -1,0 +1,1 @@
+{"name":"faker","tables":{"persons":{"name":"persons","indexes":{"name":{"name":"name","build":true},"username":{"name":"username","build":true},"email":{"name":"email","build":true}}}},"version":"0.0.1"}
