@@ -1,32 +1,73 @@
 import Database from "./lib/Database.js"
+import Perf from "./lib/PerformanceCounter.js"
 import faker from "faker"
 
-
-
-let start = process.hrtime();
 (async () => {
     let db = await new Database("faker");
-    ///*    
-    let persons = [];
-    for(let i = 0; i < 100000; i++) {
-        persons.push(faker.helpers.userCard())
-    }
     
-    time("start pushing")
-    for(let i = 0; i < persons.length; i++) {
-        //console.log(i);
-        await db.table("persons").push(persons[i])
-    }
-    time("stopped pushing") //*/
+    let persons = [];
+    Perf.active = true
+
     await db.table("persons").ensureIndex("name");
     await db.table("persons").ensureIndex('username');
     await db.table("persons").ensureIndex('email');
-    time("start reading")
+
+    for(let i = 0; i < 10; i++) {
+        persons.push(faker.helpers.userCard())
+    }
+    
+    for(let i = 0; i < persons.length; i++) {
+        await db.table("persons").push(persons[i])
+    }
+
+    /*
     let r = await db.table("persons").find((row) => {
         return row.email === 'Taurean.Emmerich@yahoo.com';
     });
-    //console.log(r);
-    time("stopped reading")
+
+    let r2 = await db.table("persons").find((row) => {
+        return row.email.endsWith("@yahoo.com");
+    });
+
+    let r3 = await db.table("persons").find((row) => {
+        return row.email === 'Taurean.Emmerich@yahoo.com';
+    });*/
+
+    Perf.active = false;
+
+    let d = Perf.data;
+
+    let modulesTable = {
+    }
+    for(let [key, value] of Object.entries(d)) {
+        let sum = value.times.reduce((pv, cv) => pv + cv, 0) 
+        let newKey = key + "                              "
+        modulesTable[newKey.substr(0, 30)] = {
+            sum: sum,
+            called: value.times.length,
+            avg: sum / value.times.length
+        }
+        let subs = value.subs;
+        for(let [key, value] of Object.entries(subs)) {
+            let sum = value.times.reduce((pv, cv) => pv + cv, 0) 
+            let newKey = "    " + key + "                          ";
+            modulesTable[newKey.substr(0, 30)] = {
+                sum: sum,
+                called: value.times.length,
+                avg: sum / value.times.length
+            }
+        }
+        
+    }
+
+    /*let s = db.db.createReadStream();
+
+    s.on("data", (data) => {
+        console.log(data);
+    })*/
+
+    console.table(modulesTable);
+    
     //console.log(r)
 
     /*
@@ -54,11 +95,3 @@ let start = process.hrtime();
     
 
 })()
-
-
-function time(note){
-    let precision = 3; // 3 decimal places
-    let elapsed = process.hrtime(start)[1] / 1000000; // divide by a million to get nano to milli
-    console.log(process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms - " + note); // print message + time
-    start = process.hrtime(); // reset the timer
-}

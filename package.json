@@ -19,17 +19,16 @@
   "homepage": "https://github.com/sbittmann/filterdb#readme",
   "dependencies": {
     "acorn": "^8.0.5",
-    "bytewise": "^1.1.0",
+    "charwise": "^3.0.1",
     "faker": "^5.4.0",
-    "jsonquery-engine": "^1.0.2",
     "level": "^6.0.1",
-    "level-delete-range": "^0.1.0",
-    "lodash.defaults": "^4.2.0",
-    "pairs": "^0.0.2",
-    "subleveldown": "^5.0.1",
+    "nanoid": "^3.1.20",
     "through": "^2.3.8",
     "through2": "^4.0.2",
     "unique-stream": "^2.3.1",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
   }
 }
