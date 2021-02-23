@@ -15,17 +15,12 @@ describe("Table", () => {
         db = await new Database(dbname);
     });
     after(async () => {
-        await fs.rmdir(`./storage/${dbname}`, {
-            recursive: true
-        });
+        await db.delete();
     });
 
-    describe("#constructor", () => {
+    describe("#constructor(name)", () => {
         it("should not allow empty name", async () => {
 
-        });
-        it("should not allow empty name", async () => {
-            
         });
     })
 });

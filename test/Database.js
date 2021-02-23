@@ -21,19 +21,19 @@ describe("Database", () => {
         });
     });
 
-    describe("#constructor()", () => {
+    describe("#constructor(databaseName)", () => {
         
         it("should create database files", async () => {
             let dbDir = await fs.readdir(`./storage/${dbname}`);
             expect(dbDir).to.have.lengthOf.greaterThan(0);
         });
 
-        it("should create database.meta.json", async () => {
+        it("should create 'database'.meta.json", async () => {
             let data = await fs.readFile(`./storage/${dbname}.meta.json`, "utf8");
             expect(data).to.not.be.undefined;
         })
     });
-    describe("#table", () => {
+    describe(".table(name)", () => {
         it("should return Table class", async () => {
             let table = db.table("test");
             expect(table).to.be.instanceOf(Table)
@@ -42,5 +42,22 @@ describe("Database", () => {
             let table = db.table("test");
             expect(table).to.be.instanceOf(Table)
         });
+    });
+    describe(".backup(fileName)", () => {
+        it("should create backup", async () => {
+            await db.backup("./backup.json");
+        })  
     })
+    describe(".delete()", () => {
+        before(async () => {
+            await db.delete();
+        });
+
+        it("should delete database files", async () => { 
+            expect(fs.readdir.bind(null ,`./storage/${dbname}`)).to.throw
+        });
+        it("should delete 'database'.meta.json", async () => {
+            expect(fs.readFile.bind(null ,`./storage/${dbname}.meta.json`)).to.throw
+        });
+    });
 })

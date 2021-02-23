@@ -21,12 +21,10 @@
     "acorn": "^8.0.5",
     "charwise": "^3.0.1",
     "faker": "^5.4.0",
-    "isolated-vm": "^3.3.10",
     "level": "^6.0.1",
     "nanoid": "^3.1.20",
-    "through": "^2.3.8",
     "through2": "^4.0.2",
-    "unique-stream": "^2.3.1"
+    "vm2": "^3.9.2"
   },
   "devDependencies": {
     "chai": "^4.3.0",
