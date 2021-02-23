@@ -26,18 +26,17 @@ import faker from "faker"
     }, {
         r: "test"
     });
-    console.log(r)
+    //console.log(r)
 
     let r2 = await db.table("persons").filter((row) => {
         return row.website === 'sherwood.biz';
     });
-    console.log("TEST", r2);
 
     let r3 = db.table("persons").filter((row) => {
         return row.website === 'sherwood.biz';
     });
     for await(let row of r3) {
-        console.log(row)
+        //console.log(row)
     }
 
 
@@ -47,6 +46,7 @@ import faker from "faker"
 
     let modulesTable = {
     }
+    
     for(let [key, value] of Object.entries(d)) {
         let sum = value.times.reduce((pv, cv) => pv + cv, 0) 
         let newKey = key + "                               "
