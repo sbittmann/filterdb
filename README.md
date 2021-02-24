@@ -7,4 +7,13 @@
 
 ## Introduction
 
-**Fast and simple storage. A Node.js wrapper for `abstract-leveldown` compliant stores, which follow the characteristics of [LevelDB](https://github.com/google/leveldb).**
+**lorem ipsum**
+asdfasdfas
+
+## Usage
+
+## API
+
+## Contributing
+
+## License
