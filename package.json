@@ -6,7 +6,8 @@
   "main": "lib/Database.js",
   "scripts": {
     "test": "c8 --check-coverage --lines 20 --functions 20 --branches 20 mocha ./test/**/*.js",
-    "ci": "c8 --check-coverage --lines 20 --functions 20 --branches 20 --reporter=lcovonly mocha ./test/**/*.js && codecov"
+    "ci": "c8 --check-coverage --lines 20 --functions 20 --branches 20 --reporter=lcovonly mocha ./test/**/*.js && codecov",
+    "prepublishOnly": "np"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "codecov": "^3.8.2",
     "faker": "^5.5.3",
     "mocha": "^8.3.2",
+    "np": "^7.5.0",
     "prettier": "^2.2.1"
   }
 }

@@ -1,0 +1,9 @@
+coverage/
+node_modules/
+storage/
+test/
+.gitignore
+.npmignore
+.prettierrc.json
+.travis.yml
+.DS_Store
