@@ -1,12 +1,10 @@
 import Database from "./lib/Database.js";
-import Perf from "./lib/PerformanceCounter.js";
 import faker from "faker";
 
 (async () => {
     let db = await new Database("faker");
-    db.backup.import();
     let persons = [];
-    Perf.active = true;
+    //Perf.active = true;
 
     await db.table("persons").ensureIndex("name");
     await db.table("persons").ensureIndex("username");
@@ -17,16 +15,14 @@ import faker from "faker";
     }
 
     for (let i = 0; i < persons.length; i++) {
-        let w = await db.table("persons").push(persons[i]);
-        console.log(w);
-        console.log(persons[i]);
+        //console.log(persons[i].name);
+        await db.table("persons").push(persons[i]);
     }
 
-    let val = "abel.net";
-    let r = await db.table("persons").find(
+    let val = "Dr. Bernice Schaefer";
+    let r = await db.table("persons").filter(
         (row) => {
-            console.log(row);
-            return row.website === val;
+            return row.name === val; //&& row.name === "TEST";
         },
         {
             val,
@@ -46,8 +42,7 @@ import faker from "faker";
     }
     //*/
 
-    Perf.active = false;
-
+    /*
     let d = Perf.data;
 
     let modulesTable = {};
@@ -85,35 +80,5 @@ import faker from "faker";
         }
     }
 
-    /*let s = db.db.createReadStream();
-
-    s.on("data", (data) => {
-        console.log(data);
-    })*/
-
-    console.table(modulesTable);
-
-    //console.log(r)
-
-    /*
-    let id = await db.table("cases").push({test: "test"});
-    console.log("ID: ", id);
-
-    let values = await db.table("cases").get(id);
-    console.log("GOT:", values);
-    
-
-    let r = await db.table("cases").find((row) => {
-        return row.test === 'test'
-    });
-
-    console.log(r);
-    //db.table("cases").remove(r._id);
-    
-
-    let r2 = await db.table("cases").filter((row) => {
-        return row.test === 'test' && row.test2 === 2
-    });
-
-    console.log(r2);*/
+    console.table(modulesTable);*/
 })();

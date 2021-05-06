@@ -9,15 +9,20 @@ let dbname = "databaseTest";
 describe("Database", () => {
     let db;
     before(async () => {
-        await fs.rmdir(`./storage/${dbname}`, {
-            recursive: true,
-        });
+        try {
+            await fs.rm(`./storage/${dbname}`, {
+                recursive: true,
+            });
+        } catch {}
+
         db = await new Database(dbname);
     });
     after(async () => {
-        await fs.rmdir(`./storage/${dbname}`, {
-            recursive: true,
-        });
+        try {
+            await fs.rm(`./storage/${dbname}`, {
+                recursive: true,
+            });
+        } catch {}
     });
 
     describe("#constructor(databaseName)", () => {

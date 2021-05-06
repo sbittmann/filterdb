@@ -19,19 +19,20 @@
   },
   "homepage": "https://github.com/sbittmann/filterdb#readme",
   "dependencies": {
-    "acorn": "^8.0.5",
+    "acorn": "^8.2.4",
     "charwise": "^3.0.1",
-    "faker": "^5.4.0",
-    "level": "^6.0.1",
-    "nanoid": "^3.1.20",
+    "level-packager": "^6.0.0",
+    "nanoid": "^3.1.22",
+    "rocksdb": "^5.0.0",
     "through2": "^4.0.2",
-    "vm2": "^3.9.2"
+    "vm2": "^3.9.3"
   },
   "devDependencies": {
-    "c8": "^7.6.0",
-    "chai": "^4.3.0",
-    "codecov": "^3.8.1",
-    "mocha": "^8.3.0",
+    "c8": "^7.7.2",
+    "chai": "^4.3.4",
+    "codecov": "^3.8.2",
+    "faker": "^5.5.3",
+    "mocha": "^8.3.2",
     "prettier": "^2.2.1"
   }
 }
