@@ -57,7 +57,8 @@ describe("Database", () => {
     });
     describe(".meta", () => {
         it("should return correct meta info", async () => {
-            expect(db.meta.name).to.be.equal(dbname);
+            let meta = db.meta
+            expect(meta.name).to.be.equal(dbname);
         });
     });
     describe(".delete()", () => {
@@ -69,8 +70,7 @@ describe("Database", () => {
             expect(fs.readdir.bind(null, `./storage/${dbname}`)).to.throw;
         });
         it("should delete 'database'.meta.json", async () => {
-            expect(fs.readFile.bind(null, `./storage/${dbname}.meta.json`)).to
-                .throw;
+            expect(fs.readFile.bind(null, `./storage/${dbname}.meta.json`)).to.throw;
         });
     });
 });

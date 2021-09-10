@@ -16,10 +16,6 @@ npm install filterdb
 
 If you just need a Database-Server and don't wan't to build the access Level around it, stay updated. Soon we will build a ready server-build.
 
-```bash
-https://cdn.jsdelivr.net/gh/jshttp/mime-db@master/db.json
-```
-
 ## Usage
 ```js
 import Database from "filterdb"
@@ -69,6 +65,9 @@ This will return some meta-data about your database.
 
 #### `db.table(tableName)`
 returns a Table-Class
+
+#### `await db.close()`
+closes the database   
 
 #### `await db.delete()`
 deletes the dataBase   

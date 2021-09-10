@@ -21,11 +21,8 @@
   "homepage": "https://github.com/sbittmann/filterdb#readme",
   "dependencies": {
     "acorn": "^8.5.0",
-    "charwise": "^3.0.1",
-    "level-packager": "^6.0.0",
     "lmdb-store": "^1.6.7",
     "nanoid": "^3.1.25",
-    "rocksdb": "^5.1.0",
     "through2": "^4.0.2",
     "vm2": "^3.9.3"
   },

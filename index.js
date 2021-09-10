@@ -2,7 +2,7 @@ import Database from "./lib/Database.js";
 import faker from "faker";
 
 (async () => {
-    let db = await new Database("faker");
+    let db = await new Database("test");
     let persons = [];
     //Perf.active = true;
 
@@ -13,10 +13,10 @@ import faker from "faker";
     for (let i = 0; i < 1; i++) {
         persons.push(faker.helpers.userCard());
     }
+    
 
     for (let i = 0; i < persons.length; i++) {
-        //console.log(persons[i].name);
-        await db.table("persons").push(persons[i]);
+        let r = await db.table("persons").push(persons[i]);
     }
 
     let val = "Dr. Bernice Schaefer";
