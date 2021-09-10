@@ -20,14 +20,11 @@ import faker from "faker";
     }
 
     let val = "Dr. Bernice Schaefer";
-    let r = await db.table("persons").filter(
-        (row) => {
-            return row.name === val; //&& row.name === "TEST";
-        },
-        {
-            val,
-        },
-    );
+    let r = await db.table("persons").filter((row) => {
+        return row.name === val; //&& row.name === "TEST";
+    },{
+        val,
+    });
     console.log(r);
     /*
     let r2 = await db.table("persons").filter((row) => {

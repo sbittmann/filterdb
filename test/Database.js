@@ -58,8 +58,6 @@ describe("Database", () => {
     describe(".meta", () => {
         it("should return correct meta info", async () => {
             expect(db.meta.name).to.be.equal(dbname);
-            expect(db.meta.name).to.be.equal(dbname);
-            //expect(backup).to.be.instanceOf(Backup);
         });
     });
     describe(".delete()", () => {

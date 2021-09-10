@@ -14,27 +14,28 @@
     "url": "git+https://github.com/sbittmann/filterdb.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sbittmann/filterdb/issues"
   },
   "homepage": "https://github.com/sbittmann/filterdb#readme",
   "dependencies": {
-    "acorn": "^8.2.4",
+    "acorn": "^8.5.0",
     "charwise": "^3.0.1",
     "level-packager": "^6.0.0",
-    "nanoid": "^3.1.22",
-    "rocksdb": "^5.0.0",
+    "lmdb-store": "^1.6.7",
+    "nanoid": "^3.1.25",
+    "rocksdb": "^5.1.0",
     "through2": "^4.0.2",
     "vm2": "^3.9.3"
   },
   "devDependencies": {
-    "c8": "^7.7.2",
+    "c8": "^7.9.0",
     "chai": "^4.3.4",
-    "codecov": "^3.8.2",
+    "codecov": "^3.8.3",
     "faker": "^5.5.3",
-    "mocha": "^8.3.2",
+    "mocha": "^9.1.1",
     "np": "^7.5.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.4.0"
   }
 }
