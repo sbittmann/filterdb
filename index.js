@@ -19,7 +19,9 @@ import faker from "faker";
         let r = await db.table("persons").push(persons[i]);
     }
 
-    let val = "Dr. Bernice Schaefer";
+    await db.table("persons").push({name: "Stefan Bittmann"});
+
+    let val = "Stefan Bittmann";
     let r = await db.table("persons").filter((row) => {
         return row.name === val; //&& row.name === "TEST";
     },{

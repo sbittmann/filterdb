@@ -36,7 +36,7 @@ describe("Table", () => {
     });
     describe(".ensureIndex(name)", () => {
         it("should create an Index", async () => {
-            await db.table(tableName).ensureIndex("test");
+            await db.table(tableName).ensureIndex("name");
         });
     });
     describe(".push(value)", () => {
@@ -62,10 +62,25 @@ describe("Table", () => {
     });
     describe(".remove(key)", () => {
         it("should delete object", async () => {
-            let id = await db.table(tableName).push({est: true});
+            let id = await db.table(tableName).push({test: true});
             await db.table(tableName).remove(id);
             let val = await db.table(tableName).get(id);
             expect(val).to.be.equal(null);
+        });
+    });
+    describe(".find(key)", () => {
+        it("should find inserted object", async () => {
+            let name = "Max Mustermann";
+            let id = await db.table(tableName).push({name: name});
+            let result = await db.table(tableName).find((l) => { 
+                return l.name === name; 
+            }, { 
+                name 
+            });
+            expect(result).to.be.a("object");
+            expect(result.value.name).to.be.equal(name);
+            expect(result.value._id).to.be.equal(id);
+
         });
     });
 });

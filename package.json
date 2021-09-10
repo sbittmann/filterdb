@@ -23,7 +23,6 @@
     "acorn": "^8.5.0",
     "lmdb-store": "^1.6.7",
     "nanoid": "^3.1.25",
-    "through2": "^4.0.2",
     "vm2": "^3.9.3"
   },
   "devDependencies": {
