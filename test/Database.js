@@ -30,13 +30,26 @@ describe("Database", () => {
             let dbDir = await fs.readdir(`./storage/${dbname}`);
             expect(dbDir).to.have.lengthOf.greaterThan(0);
         });
-
-        it("should create 'database'.meta.json", async () => {
+        it("should create 'databaseName'.meta.json", async () => {
             let data = await fs.readFile(
                 `./storage/${dbname}.meta.json`,
                 "utf8",
             );
             expect(data).to.not.be.undefined;
+        });
+        it("should upgrade db without errors", async () => {
+            db.close();
+            let data = JSON.parse(await fs.readFile(
+                `./storage/${dbname}.meta.json`,
+                "utf8",
+            ));
+            data.version = "0.0.1";
+            await fs.writeFile(
+                `./storage/${dbname}.meta.json`,
+                JSON.stringify(data, null, 4), {
+                    encoding: "utf8"
+                })
+            db = await new Database(dbname);
         });
     });
     describe(".table(name)", () => {
@@ -60,6 +73,14 @@ describe("Database", () => {
             let meta = db.meta
             expect(meta.name).to.be.equal(dbname);
         });
+    });
+    describe(".close()", () => {
+        before(async () => {
+            db.close();
+        });
+        after(async () => {
+            db = await new Database(dbname);
+        })
     });
     describe(".delete()", () => {
         before(async () => {

@@ -78,8 +78,8 @@ describe("Table", () => {
                 name 
             });
             expect(result).to.be.a("object");
-            expect(result.value.name).to.be.equal(name);
-            expect(result.value._id).to.be.equal(id);
+            expect(result.name).to.be.equal(name);
+            expect(result._id).to.be.equal(id);
 
         });
     });
