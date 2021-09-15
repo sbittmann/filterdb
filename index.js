@@ -2,9 +2,56 @@ import Database from "./lib/Database.js";
 import faker from "faker";
 
 (async () => {
-    let db = await new Database("test");
+    let db = await new Database("test", {
+        cluster: {
+            id: "1",
+            port: 8080,
+        },
+        server: {
+            port: 8000
+        }
+    });
+    console.log("open1")
+    let db2 = await new Database("test", {
+        cluster: {
+            id: "2",
+            port: 8081,
+            peers: ["localhost:8080"]
+        },
+        
+    });
+    console.log("open2")
+    let db3 = await new Database("test", {
+        cluster: {
+            id: "3",
+            port: 8082,
+            peers: ["localhost:8081"]
+        },
+    });
+    console.log("open3")
+    let db4 = await new Database("test", {
+        cluster: {
+            id: "4",
+            port: 8083,
+            peers: ["localhost:8081"]
+        },
+        
+    });
+    console.log("open4")
+    
+
+    setTimeout(() => {
+        console.log("CLOSING")
+        db.close();
+        db2.close();
+
+        setTimeout(async () => {
+            await db.start();
+            console.log("DB STARTED AGAIN")
+        }, 2000)
+    }, 5000)
+
     let persons = [];
-    //Perf.active = true;
 
     await db.table("persons").ensureIndex("name");
     await db.table("persons").ensureIndex("username");
@@ -23,61 +70,8 @@ import faker from "faker";
 
     let val = "Stefan Bittmann";
     let r = await db.table("persons").filter((row) => {
-        return row.name === val; //&& row.name === "TEST";
+        return row.name === val;
     },{
         val,
     });
-    console.log(r);
-    /*
-    let r2 = await db.table("persons").filter((row) => {
-        return row.website === 'sherwood.biz';
-    });
-
-    let r3 = db.table("persons").filter((row) => {
-        return row.website === 'sherwood.biz';
-    });
-    for await(let row of r3) {
-        //console.log(row)
-    }
-    //*/
-
-    /*
-    let d = Perf.data;
-
-    let modulesTable = {};
-
-    for (let [key, value] of Object.entries(d)) {
-        let sum = value.times.reduce((pv, cv) => pv + cv, 0);
-        let newKey = key + "                               ";
-        modulesTable[newKey.substr(0, 31)] = {
-            sum: sum,
-            called: value.times.length,
-            avg: sum / value.times.length,
-            min: value.times.reduce((min, v) => (min <= v ? min : v), Infinity),
-            max: value.times.reduce(
-                (max, v) => (max >= v ? max : v),
-                -Infinity,
-            ),
-        };
-        let subs = value.subs;
-        for (let [key, value] of Object.entries(subs)) {
-            let sum = value.times.reduce((pv, cv) => pv + cv, 0);
-            let newKey = "    " + key + "                           ";
-            modulesTable[newKey.substr(0, 31)] = {
-                sum: sum,
-                called: value.times.length,
-                avg: sum / value.times.length,
-                min: value.times.reduce(
-                    (min, v) => (min <= v ? min : v),
-                    Infinity,
-                ),
-                max: value.times.reduce(
-                    (max, v) => (max >= v ? max : v),
-                    -Infinity,
-                ),
-            };
-        }
-    }
-
-    console.table(modulesTable);*/
 })();
