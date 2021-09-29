@@ -11,7 +11,6 @@ import faker from "faker";
             port: 8000
         }
     });
-    console.log("open1")
     let db2 = await new Database("test", {
         cluster: {
             id: "2",
@@ -20,7 +19,6 @@ import faker from "faker";
         },
         
     });
-    console.log("open2")
     let db3 = await new Database("test", {
         cluster: {
             id: "3",
@@ -28,16 +26,13 @@ import faker from "faker";
             peers: ["localhost:8081"]
         },
     });
-    console.log("open3")
     let db4 = await new Database("test", {
         cluster: {
             id: "4",
             port: 8083,
             peers: ["localhost:8081"]
         },
-        
     });
-    console.log("open4")
     
 
     setTimeout(() => {
@@ -48,8 +43,8 @@ import faker from "faker";
         setTimeout(async () => {
             await db.start();
             console.log("DB STARTED AGAIN")
-        }, 2000)
-    }, 5000)
+        }, 5000)
+    }, 3000)
 
     let persons = [];
 
