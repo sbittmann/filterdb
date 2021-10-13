@@ -105,6 +105,9 @@ inserts `obj` into the table
 removes obj with Key `key` from the table
 
 ## Contributing
+It's hard getting this working, but maybe you have some sparetime and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further.
+
+Contribution is always welcome.
 
 ## License
 This library is licensed under the terms of the MIT license.
