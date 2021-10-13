@@ -101,7 +101,7 @@ describe("Table", () => {
 
         })
 
-        it("should use index on AND syntax", async () => {
+        it("should use index with AND syntax", async () => {
             let name = "Maxi Mustermann";
             await db.table(tableName).push({name: name, test: true});
 
@@ -119,7 +119,7 @@ describe("Table", () => {
         })
 
         
-        it("should use index on OR syntax", async () => {
+        it("should use index with OR syntax", async () => {
             let name = "Maxi Mustermann";
             await db.table(tableName).push({name: name, test: true});
 
@@ -136,5 +136,19 @@ describe("Table", () => {
             expect(q.indexes.test).to.be.a("number");
         })
 
+        it("should work without index", async () => { 
+            let notIndexed = "123";
+            let id = await db.table(tableName).push({notIndexed, test: true});
+
+            let result = await db.table(tableName).find((l) => { 
+                return l.notIndexed === notIndexed;
+            }, { 
+                notIndexed
+            });
+
+            expect(result).to.be.a("object");
+            expect(result.notIndexed).to.be.equal(notIndexed);
+            expect(result._id).to.be.equal(id);
+        })
     });
 });
