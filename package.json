@@ -21,15 +21,15 @@
   "homepage": "https://github.com/sbittmann/filterdb#readme",
   "dependencies": {
     "acorn": "^8.5.0",
-    "axios": "^0.21.4",
-    "fastify": "^3.21.6",
+    "axios": "^0.22.0",
+    "fastify": "^3.22.0",
     "lmdb-store": "^1.6.8",
-    "nanoid": "^3.1.28",
+    "nanoid": "^3.1.29",
     "vm2": "^3.9.3",
-    "ws": "^8.2.2"
+    "ws": "^8.2.3"
   },
   "devDependencies": {
-    "c8": "^7.9.0",
+    "c8": "^7.10.0",
     "chai": "^4.3.4",
     "codecov": "^3.8.3",
     "faker": "^5.5.3",

@@ -37,6 +37,7 @@ describe("Table", () => {
     describe(".ensureIndex(name)", () => {
         it("should create an Index", async () => {
             await db.table(tableName).ensureIndex("name");
+            await db.table(tableName).ensureIndex("test");
         });
     });
     describe(".push(value)", () => {
@@ -77,10 +78,63 @@ describe("Table", () => {
             }, { 
                 name 
             });
+            
             expect(result).to.be.a("object");
             expect(result.name).to.be.equal(name);
             expect(result._id).to.be.equal(id);
-
         });
+
+        it("should use simple index", async () => {
+            let name = "Max Mustermann";
+            let name2 = "Maxi Mustermann";
+            await db.table(tableName).push({name: name});
+            await db.table(tableName).push({name: name2});
+
+            let result = await db.table(tableName).find((l) => { 
+                return l.name === name; 
+            }, { 
+                name
+            });
+
+            expect(result.name).to.be.equal(name);
+            expect(result.getQuery().indexes.name).to.be.a("number");
+
+        })
+
+        it("should use index on AND syntax", async () => {
+            let name = "Maxi Mustermann";
+            await db.table(tableName).push({name: name, test: true});
+
+            let result = await db.table(tableName).find((l) => { 
+                return l.name === name && l.test === true; 
+            }, { 
+                name
+            });
+
+            let q = result.getQuery();
+
+            expect(result.name).to.be.equal(name);
+            expect(q.indexes.name).to.be.a("number");
+            expect(q.indexes.test).to.be.a("number");
+        })
+
+        
+        it("should use index on OR syntax", async () => {
+            let name = "Maxi Mustermann";
+            await db.table(tableName).push({name: name, test: true});
+
+            let result = await db.table(tableName).find((l) => { 
+                return l.name === name || l.test === true; 
+            }, { 
+                name
+            });
+
+            let q = result.getQuery();
+
+            expect(result.name).to.be.equal(name);
+            expect(q.indexes.name).to.be.a("number");
+            expect(q.indexes.test).to.be.a("number");
+        })
+
     });
 });

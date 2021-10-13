@@ -11,6 +11,7 @@ import faker from "faker";
             port: 8000
         }
     });
+    /*
     let db2 = await new Database("test", {
         cluster: {
             id: "2",
@@ -45,27 +46,47 @@ import faker from "faker";
             console.log("DB STARTED AGAIN")
         }, 5000)
     }, 3000)
+    */
 
     let persons = [];
 
     await db.table("persons").ensureIndex("name");
-    await db.table("persons").ensureIndex("username");
+    await db.table("persons").ensureIndex("birthdate");
     await db.table("persons").ensureIndex("email");
 
-    for (let i = 0; i < 1; i++) {
+    await db.table("persons").push({name: "Max Mustermann"});
+    await db.table("persons").push({name: "Max Mustermann"});
+
+    let name = "Max Mustermann"
+    let result = await db.table("persons").find((l) => { 
+        return l.name === name; 
+    }, { 
+        name 
+    });
+    let result2 = await db.table("persons").find((l) => { 
+        return l.name == newname; 
+    }, { 
+        newname: name 
+    });
+    return;
+
+    /*for (let i = 0; i < 1; i++) {
         persons.push(faker.helpers.userCard());
-    }
+    }*/
     
 
-    for (let i = 0; i < persons.length; i++) {
+    /*for (let i = 0; i < persons.length; i++) {
         let r = await db.table("persons").push(persons[i]);
-    }
+    }*/
+    
+    await db.table("persons").push({name: "Stefan Bittmann", birthdate: "19940713"});
+    
 
-    await db.table("persons").push({name: "Stefan Bittmann"});
+
 
     let val = "Stefan Bittmann";
     let r = await db.table("persons").filter((row) => {
-        return row.name === val;
+        return row.birthdate === "19940713" && row.name === val || row.test === 1
     },{
         val,
     });
