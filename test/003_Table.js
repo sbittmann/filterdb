@@ -5,7 +5,7 @@ import { expect } from "chai";
 let dbname = "tableTest";
 let tableName = "test"
 
-describe("Table", () => {
+describe("Table (class)", () => {
     let db;
 
     before(async () => {
@@ -22,9 +22,9 @@ describe("Table", () => {
 
     describe("#constructor(name)", () => {
         it("should not allow empty name", async () => {
-            expect(db.table.bind(null)).to.throw
-            expect(db.table.bind(null, null)).to.throw
-            expect(db.table.bind(null, "")).to.throw         
+            expect(() => { db.table() }).to.throw()
+            expect(() => { db.table(null) }).to.throw()
+            expect(() => { db.table("") }).to.throw()         
         });
         
     });

@@ -5,7 +5,7 @@ import { expect } from "chai";
 
 let dbname = "backupTest";
 
-describe("Backup", () => {
+describe("Backup (class)", () => {
     let db;
     let id;
 

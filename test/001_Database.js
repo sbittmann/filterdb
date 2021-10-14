@@ -6,7 +6,7 @@ import { expect } from "chai";
 
 let dbname = "databaseTest";
 
-describe("Database", () => {
+describe("Database (class)", () => {
     let db;
     before(async () => {
         try {
