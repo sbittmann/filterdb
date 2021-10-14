@@ -104,6 +104,16 @@ inserts `obj` into the table
 #### `await table.remove(key)`
 removes obj with Key `key` from the table
 
+## In progress
+- [x] Index support for && and || operators
+- [ ] full REST-API with fastify 
+- [ ] realtime-API with websockets
+- [ ] authentication 
+- [ ] standalone server version
+- [ ] addons
+- [ ] performance optimization
+- [ ] UI
+
 ## Contributing
 It's hard getting this working, but maybe you have some sparetime and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further.
 
