@@ -24,7 +24,7 @@ describe("Backup (class)", () => {
         
 
         db = await new Database(dbname);
-        id = await db.table("test").push({backUpTest: true});
+        id = await db.table("test").save({backUpTest: true});
     });
     after(async () => {
         await db.delete();

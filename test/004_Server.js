@@ -1,4 +1,5 @@
 import Database from "../lib/Database.js";
+import Server from "../plugins/Server.js";
 import fs from "fs/promises";
 import axios from "axios"
 import { expect } from "chai";
@@ -14,13 +15,12 @@ describe("Server", () => {
             });
         } catch {}
 
-        db = await new Database(dbname, {
-            server: {
-                port: 8080
-            }
-        });
+        db = await new Database(dbname);
+        await db.extend(new Server({
+            port: 8080
+        }))
         await db.table("persons").ensureIndex("name");
-        await db.table("persons").push({name: "Max Mustermann"})
+        await db.table("persons").save({name: "Max Mustermann"})
     });
     after(async () => {
         try {
@@ -48,7 +48,7 @@ describe("Server", () => {
     describe("/table/:table/:id", () => {
         it("GET: should load db entry", async () => {
             let item = { name: "Max Mustermann" }
-            let id = await db.table("persons").push(item);
+            let id = await db.table("persons").save(item);
 
             let { data } = await axios.get("http://localhost:8080/table/persons/" + id)
             
@@ -57,7 +57,7 @@ describe("Server", () => {
 
         it("DELETE: should delete db entry", async () => {
             let item = { name: "Max Mustermann" }
-            let id = await db.table("persons").push(item);
+            let id = await db.table("persons").save(item);
 
             await axios.delete("http://localhost:8080/table/persons/" + id)
             

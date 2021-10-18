@@ -22,10 +22,10 @@ describe("Querys", () => {
         await db.table("persons").ensureIndex("name");
 
 
-        await db.table("persons").push({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        await db.table("persons").push({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        await db.table("persons").push({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        maxMustermann = await db.table("persons").push({name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        maxMustermann = await db.table("persons").save({name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
         
     });
     

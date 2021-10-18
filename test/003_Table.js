@@ -40,22 +40,22 @@ describe("Table (class)", () => {
             await db.table(tableName).ensureIndex("test");
         });
     });
-    describe(".push(value)", () => {
+    describe(".save(value)", () => {
         let id;
 
         it("should insert value and return id", async () => {
-            id = await db.table(tableName).push({test: true});
+            id = await db.table(tableName).save({test: true});
             expect(id).to.be.a('string')
         });
         it("should update object", async () => {
-            let updateId = await db.table(tableName).push({_id: id, test: false});
+            let updateId = await db.table(tableName).save({_id: id, test: false});
             expect(updateId).to.be.equal(id);
         });
     });
     describe(".get(value)", () => {
         it("should return object by key", async () => {
             let id = "testId123456789"
-            await db.table(tableName).push({_id: id, test: true})
+            await db.table(tableName).save({_id: id, test: true})
             let val = await db.table(tableName).get(id);
             expect(val).to.be.a("object");
             expect(val.test).to.be.equal(true);
@@ -63,7 +63,7 @@ describe("Table (class)", () => {
     });
     describe(".remove(key)", () => {
         it("should delete object", async () => {
-            let id = await db.table(tableName).push({test: true});
+            let id = await db.table(tableName).save({test: true});
             await db.table(tableName).remove(id);
             let val = await db.table(tableName).get(id);
             expect(val).to.be.equal(null);
@@ -72,7 +72,7 @@ describe("Table (class)", () => {
     describe(".find(key)", () => {
         it("should find inserted object", async () => {
             let name = "Max Mustermann";
-            let id = await db.table(tableName).push({name: name});
+            let id = await db.table(tableName).save({name: name});
             let result = await db.table(tableName).find((l) => { 
                 return l.name === name; 
             }, { 
@@ -87,8 +87,8 @@ describe("Table (class)", () => {
         it("should use simple index", async () => {
             let name = "Max Mustermann";
             let name2 = "Maxi Mustermann";
-            await db.table(tableName).push({name: name});
-            await db.table(tableName).push({name: name2});
+            await db.table(tableName).save({name: name});
+            await db.table(tableName).save({name: name2});
 
             let result = await db.table(tableName).find((l) => { 
                 return l.name === name; 
@@ -103,7 +103,7 @@ describe("Table (class)", () => {
 
         it("should use index with AND syntax", async () => {
             let name = "Maxi Mustermann";
-            await db.table(tableName).push({name: name, test: true});
+            await db.table(tableName).save({name: name, test: true});
 
             let result = await db.table(tableName).find((l) => { 
                 return l.name === name && l.test === true; 
@@ -121,7 +121,7 @@ describe("Table (class)", () => {
         
         it("should use index with OR syntax", async () => {
             let name = "Maxi Mustermann";
-            await db.table(tableName).push({name: name, test: true});
+            await db.table(tableName).save({name: name, test: true});
 
             let result = await db.table(tableName).find((l) => { 
                 return l.name === name || l.test === true; 
@@ -138,7 +138,7 @@ describe("Table (class)", () => {
 
         it("should work without index", async () => { 
             let notIndexed = "123";
-            let id = await db.table(tableName).push({notIndexed, test: true});
+            let id = await db.table(tableName).save({notIndexed, test: true});
 
             let result = await db.table(tableName).find((l) => { 
                 return l.notIndexed === notIndexed;
