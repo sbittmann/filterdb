@@ -110,6 +110,7 @@ removes obj with Key `key` from the table
 - [ ] realtime-API with websockets
 - [ ] authentication 
 - [ ] standalone server version
+- [ ] client package
 - [ ] addons
 - [ ] performance optimization
 - [ ] UI
