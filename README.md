@@ -5,7 +5,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Blazing Fast](https://img.shields.io/badge/speed-blazing%20%F0%9F%94%A5-brightgreen.svg?style=flat-square)](https://twitter.com/acdlite/status/974390255393505280)
 
-This is a no-SQL database completly written in node.js. Data could be accessed with JS-Syntax no need to learn a new QueryLanguage
+This is an fully extendable no-SQL database completly written in node.js. Data could be accessed with JS-Array like find/filter Syntax. So there is no need to learn a new QueryLanguage.
 
 ## Installation
 ```bash
@@ -113,16 +113,63 @@ returns the id of inserted obj.
 #### `await table.remove(_id)`
 removes obj with id `_id` from the table
 
+## Plugins
+
+### http-server based on fastify
+```js
+import Database from "filterdb"
+import Server from "filterdb/plugins/Server"
+
+(async () => {
+    let db = await new Database("myDB");
+    db.extend(new Server({
+        port: 8080
+    }))
+})()
+```
+
+###
+```js
+import Database from "filterdb"
+import Cluster from "filterdb/plugins/Cluster"
+
+(async () => {
+    let db1 = await new Database("db1");
+    let db2 = await new Database("db2");
+
+    db1.extend(new Cluster({
+        port: 9000,
+    }))
+
+    db2.extend(new Cluster({
+        port: 9001,
+        join: "172.0.0.1:9000"
+    }));
+})()
+```
+
 ## In progress
+
+### main-package
 - [x] Index support for && and || operators
-- [ ] full REST-API with fastify 
+- [x] plugins
+- [ ] more usable events for plugin usage
+- [ ] authentication
+- [ ] performance optimization (worker_threads, ...) 
+
+
+### httpServer-Plugin
+- [x] full REST-API with fastify 
 - [ ] realtime-API with websockets
-- [ ] authentication 
-- [ ] standalone server version
 - [ ] client package
-- [ ] addons
-- [ ] performance optimization
 - [ ] UI
+
+### cluster-Plugin
+- [ ] creation
+- [ ] keep WebSocket Communication or switch to tcp?
+- [ ] Stability-Checks
+- [ ] Load-Balancing
+- [ ] ...
 
 ## Contributing
 It's hard getting this working, but maybe you have some sparetime and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further.
