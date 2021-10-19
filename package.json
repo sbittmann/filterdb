@@ -1,6 +1,6 @@
 {
   "name": "filterdb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "filterdb is an fully extendable no-SQL database completly written in node.js. Data could be accessed with JS-Array like find/filter Syntax. So there is no need to learn a new QueryLanguage.",
   "type": "module",
   "main": "lib/Database.js",
@@ -14,7 +14,14 @@
     "url": "git+https://github.com/sbittmann/filterdb.git"
   },
   "author": "sbittmann",
-  "keywords": ["stream", "database", "db", "store", "storage", "json"],
+  "keywords": [
+    "stream",
+    "database",
+    "db",
+    "store",
+    "storage",
+    "json"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sbittmann/filterdb/issues"
