@@ -39,6 +39,23 @@ describe("Table (class)", () => {
             await db.table(tableName).ensureIndex("name");
             await db.table(tableName).ensureIndex("test");
         });
+        it("should create an Index on already inserted data", async () => {
+            let id = await db.table(tableName).save({title: "Mr."})
+            await db.table(tableName).ensureIndex("title");
+            let data = await db.table(tableName).find((row) => { return row.title === "Mr." });
+
+            expect(data.title).to.be.equal("Mr.");
+            expect(data._id).to.be.equal(id);
+            expect(data.getQuery().indexes.title).to.be.gte(0);
+        });
+    });
+    describe(".removeIndex(name)", () => {
+        it("should delete an Index", async () => {
+            await db.table(tableName).removeIndex("title");
+        });
+        it("shouldn't use deleted index", async () => {
+            let data = await db.table(tableName).find((row) => { return row.title === "Mr." });
+        });
     });
     describe(".save(value)", () => {
         let id;
@@ -53,7 +70,7 @@ describe("Table (class)", () => {
         });
     });
     describe(".get(value)", () => {
-        it("should return object by key", async () => {
+        it("should return object by id", async () => {
             let id = "testId123456789"
             await db.table(tableName).save({_id: id, test: true})
             let val = await db.table(tableName).get(id);
@@ -61,7 +78,7 @@ describe("Table (class)", () => {
             expect(val.test).to.be.equal(true);
         });
     });
-    describe(".remove(key)", () => {
+    describe(".remove(id)", () => {
         it("should delete object", async () => {
             let id = await db.table(tableName).save({test: true});
             await db.table(tableName).remove(id);
@@ -69,7 +86,7 @@ describe("Table (class)", () => {
             expect(val).to.be.equal(null);
         });
     });
-    describe(".find(key)", () => {
+    describe(".find(id)", () => {
         it("should find inserted object", async () => {
             let name = "Max Mustermann";
             let id = await db.table(tableName).save({name: name});

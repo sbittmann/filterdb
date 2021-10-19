@@ -29,7 +29,7 @@ describe("Querys", () => {
         
     });
     
-    describe("return row.name === name", async () => {
+    describe("(row) => { return row.name === name }", async () => {
         let name = "Max Mustermann"
         let result
 
@@ -48,14 +48,40 @@ describe("Querys", () => {
             expect(result[0]._id).to.be.equal(maxMustermann);
         });
 
-        it("should use index", async () => {
+        it("should use index without interpreter", async () => {
             let q = result.getQuery();
-            expect(q.indexes.name).to.be.gte(0);
+            expect(q.indexes.name).to.be.gte(1);
             expect(q.interpreterNeeded).to.be.equal(false)
         });
     });
 
-    describe("return row.name === name && row.birthdate === birthdate", async () => {
+    describe("(row) => row.name === name", async () => {
+        let name = "Max Mustermann"
+        let result
+
+        before(async () => {
+            result = await db.table("persons").filter(
+            row => row.name === name
+            , { name })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(1);
+        });
+
+        it("should find entry with correct data", async () => {
+            expect(result[0].name).to.be.equal(name);
+            expect(result[0]._id).to.be.equal(maxMustermann);
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.name).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
+        });
+    });
+
+    describe("(row) => { return row.name === name && row.birthdate === birthdate }", async () => {
         let name = "Maxi Mustermann"
         let birthdate = "1976-02-01T00:00:00.000Z"
         let result
@@ -77,12 +103,11 @@ describe("Querys", () => {
             }
         });
 
-        /*it("should use the avaiable index and interpreter", async () => {
+        it("should use the avaiable index and interpreter", async () => {
             let q = result.getQuery();
-            console.log(q);
-            expect(q.indexes.name).to.be.gte(0);
+            expect(q.indexes.name).to.be.gte(1);
             expect(q.interpreterNeeded).to.be.equal(true)
-        });*/
+        });
     });
 
     after(async () => {
