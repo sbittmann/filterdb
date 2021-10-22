@@ -172,9 +172,13 @@ import Cluster from "filterdb/plugins/Cluster"
 - [ ] ...
 
 ## Contributing
-It's hard getting this working, but maybe you have some sparetime and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further.
+It's hard getting this working, but maybe you have some time and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further. Contribution is always welcome.
 
-Contribution is always welcome.
+1.  Create a fork
+2.  Create your feature branch: `git checkout -b my-feature`
+3.  Commit your changes: `git commit -am 'Add some feature'`
+4.  Push to the branch: `git push origin my-new-feature`
+5.  Submit a pull request 🚀
 
 ## License
 This library is licensed under the terms of the MIT license.
