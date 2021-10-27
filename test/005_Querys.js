@@ -1,5 +1,4 @@
 import Database from "../lib/Database.js";
-import Backup from "../lib/Backup.js";
 import fs from "fs/promises";
 import { expect } from "chai";
 
@@ -27,6 +26,10 @@ describe("Querys", () => {
         await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
         maxMustermann = await db.table("persons").save({name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
         
+    });
+
+    after(async () => {
+        await db.delete();
     });
     
     describe("(row) => { return row.name === name }", async () => {
@@ -108,9 +111,5 @@ describe("Querys", () => {
             expect(q.indexes.name).to.be.gte(1);
             expect(q.interpreterNeeded).to.be.equal(true)
         });
-    });
-
-    after(async () => {
-        await db.delete();
     });
 })

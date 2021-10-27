@@ -30,10 +30,15 @@ describe("Backup (class)", () => {
         await db.delete();
     });
     describe(".create(filepath)", () => {
+        let backup
+        after(async () => {
+            await backup.delete()
+        });
+
         it("should create BackUp with data", async () => {
             await db.backup.create("storage/backup/");
-            let db2 = await new Database("backup");
-            let data = await db2.table("test").get(id);
+            backup = await new Database("backup");
+            let data = await backup.table("test").get(id);
             expect(data).to.be.a("object");
             expect(data.backUpTest).to.be.equal(true);
         });

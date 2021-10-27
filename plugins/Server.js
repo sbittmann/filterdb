@@ -8,8 +8,8 @@ export default class Server {
     }
     async start(db) {
         this.#server = fastify()
-            //DB
         this.#server.get('/meta', async (req) => {
+            console.log("meta")
             return db.meta;
         })
         //TABLE
@@ -39,9 +39,8 @@ export default class Server {
             return true
         })
         
-
         await new Promise((res, rej) => {
-            this.#server.listen(this.#port, '0.0.0.0', (err, address) => {
+            this.#server.listen(this.#port, (err, address) => {
                 if(err) {
                     rej(err);
                     return;

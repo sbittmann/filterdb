@@ -1,16 +1,17 @@
 import Database from "./lib/Database.js";
+import Server from "./plugins/Server.js";
+import axios from "axios";
 import faker from "faker";
 
 (async () => {
-    let db = await new Database("test", {
-        cluster: {
-            id: "1",
-            port: 8080,
-        },
-        server: {
-            port: 8000
-        }
-    });
+    let db = await new Database("test");
+    await db.table("persons").ensureIndex("name");
+    await db.table("persons").save({name: "Max Mustermann"})
+    let resul = await db.table("persons").find(row => row.name === "Max Mustermann");
+    console.log(resul.getQuery())
+    await new Promise((res) => { setTimeout(res, 5000)})
+    await db.close();
+    return;
     /*
     let db2 = await new Database("test", {
         cluster: {

@@ -76,7 +76,7 @@ describe("Database (class)", () => {
     });
     describe(".close()", () => {
         before(async () => {
-            db.close();
+            await db.close();
         });
         after(async () => {
             db = await new Database(dbname);
@@ -87,11 +87,19 @@ describe("Database (class)", () => {
             await db.delete();
         });
 
-        it("should delete database files", async () => {
-            expect(fs.readdir.bind(null, `./storage/${dbname}`)).to.throw;
+        it("should delete database files", (next) => {
+            fs.readdir(`./storage/${dbname}`).then(() => { 
+                throw Error('should error');
+            }).catch(() => {
+                next();
+            })
         });
-        it("should delete 'database'.meta.json", async () => {
-            expect(fs.readFile.bind(null, `./storage/${dbname}.meta.json`)).to.throw;
+        it("should delete 'database'.meta.json", (next) => {
+            fs.readFile(`./storage/${dbname}.meta.json`).then(() => { 
+                throw Error('should error');
+            }).catch(() => {
+                next();
+            })
         });
     });
 });
