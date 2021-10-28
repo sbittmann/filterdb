@@ -16,10 +16,11 @@ describe("Server", () => {
             });
         } catch {}
 
-        db = await new Database(dbname);
-        await db.extend(new Server({
-            port: port
-        }))
+        db = await new Database(dbname, {
+            plugins: [new Server({
+                port: port
+            })]
+        });
         await db.table("persons").ensureIndex("name");
         await db.table("persons").save({name: "Max Mustermann"})
     });
