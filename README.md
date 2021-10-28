@@ -153,9 +153,10 @@ import Cluster from "filterdb/plugins/Cluster"
 ### main-package
 - [x] Index support for && and || operators
 - [x] plugins
+- [x] Multi-Threading (threads.js)
 - [ ] more usable events for plugin usage
 - [ ] authentication
-- [ ] performance optimization (worker_threads, ...) 
+- [ ] performance optimization
 
 
 ### httpServer-Plugin
