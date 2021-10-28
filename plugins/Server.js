@@ -9,7 +9,6 @@ export default class Server {
     async start(db) {
         this.#server = fastify()
         this.#server.get('/meta', async (req) => {
-            console.log("meta")
             return db.meta;
         })
         //TABLE
