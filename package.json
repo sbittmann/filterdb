@@ -30,8 +30,8 @@
   "dependencies": {
     "acorn": "^8.5.0",
     "axios": "^0.24.0",
-    "fastify": "^3.22.1",
-    "lmdb-store": "^1.6.10",
+    "fastify": "^3.23.1",
+    "lmdb-store": "^1.6.13",
     "minimist": "^1.2.5",
     "nanoid": "^3.1.30",
     "threads": "^1.7.0",
