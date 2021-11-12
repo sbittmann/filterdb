@@ -31,25 +31,12 @@ describe("Database (class)", () => {
             let dbDir = await fs.readdir(`./storage/${dbname}`);
             expect(dbDir).to.have.lengthOf.greaterThan(0);
         });
-        it("should create 'databaseName'.meta.json", async () => {
-            let data = await fs.readFile(
-                `./storage/${dbname}.meta.json`,
-                "utf8",
-            );
-            expect(data).to.not.be.undefined;
-        });
         it("should upgrade db without errors", async () => {
-            db.close();
-            let data = JSON.parse(await fs.readFile(
-                `./storage/${dbname}.meta.json`,
-                "utf8",
-            ));
+            let data = db.meta
             data.version = "0.0.1";
-            await fs.writeFile(
-                `./storage/${dbname}.meta.json`,
-                JSON.stringify(data, null, 4), {
-                    encoding: "utf8"
-                })
+            await db._db.put("meta", data);
+
+            await db.close();
             db = await new Database(dbname);
         });
     });
@@ -97,13 +84,13 @@ describe("Database (class)", () => {
             await db.delete();
         });
         it("should throw on get meta data", (next) => {
-            let thrown = false
+            let thrown = false;
             try {
                 let meta = db.meta;
             } catch {
                 thrown = true
             }
-
+            
             if(thrown) {
                 next();
                 return

@@ -32,7 +32,7 @@ describe("Backup (class)", () => {
     describe(".create(filepath)", () => {
         let backup
         after(async () => {
-            await backup.delete()
+            await backup.delete();
         });
 
         it("should create BackUp with data", async () => {
