@@ -4,13 +4,22 @@ import axios from "axios";
 import faker from "faker";
 
 (async () => {
+    console.log(1)
     let db = await new Database("test");
-    await db.table("persons").ensureIndex("name");
-    await db.table("persons").save({name: "Max Mustermann"})
-    let resul = await db.table("persons").find(row => row.name === "Max Mustermann");
-    console.log(resul.getQuery())
-    await new Promise((res) => { setTimeout(res, 5000)})
-    await db.close();
+    console.log(2)
+    let id = await db.table("persons").save({name: "Max Mustermann"})
+    console.log(id)
+    console.log(3)
+    await db.backup.create("storage/backup/");
+    console.log(4)
+    let backup = await new Database("backup");
+    console.log(5)
+    let data = await backup.table("persons").get(id);
+    console.log(data);
+    //await backup.close();
+    //await backup.delete();
+    await db.delete();
+    await backup.delete();
     return;
     /*
     let db2 = await new Database("test", {

@@ -1,7 +1,5 @@
 language: node_js
 node_js:
-    - 14
-    - 15
     - 16
     - 17
 script: npm run ci
