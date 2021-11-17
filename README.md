@@ -57,7 +57,12 @@ import Database from "filterdb"
 import Server from "filterdb/plugins/Server"
 
 (async () => {
-    let db = await new Database("myDB");
+    //create database with options
+    let db = await new Database("myDB", {
+        path: "/database/data/",
+        cache: true,
+        plugins: [],
+    });
     //extend Database with Http-Server plugin
     db.extend(new Server({
         port: 8080
