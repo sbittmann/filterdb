@@ -44,6 +44,22 @@ for await(let row of r2) {
     console.log(row)
 }
 
+for (let i = 0; i < 100; i++) {
+    await db.table("numbers").save({num: i});
+}
+//Sort your data
+let resultSort = await db.table("numbers").filter((row) => row.num <= 50).sort((a, b) => { a.num < b.num? -1 : a.num > b.num? 1 : 0});
+console.log(resultSort)
+//Map your data
+let resultMap = await db.table("numbers").filter((row) => row.num <= 50).map((row) => { return row.num*2 });
+console.log(resultMap)
+//Reduce your data
+let resultSortMapReduce = await db.table("numbers").filter((row) => row.num <= 50).reduce((total, row) => { return total + row.num });
+console.log(resultReduce)
+
+//All functions could be chained too
+let resultMapReduce = await db.table("numbers").filter((row) => row.num <= 50).map((row) => { return row.num*2 }).reduce((total, num) => { return total + num })
+console.log(resultMapReduce)
 })()
 
 ```
@@ -160,10 +176,10 @@ import Cluster from "filterdb/plugins/Cluster"
 - [x] plugins
 - [x] Multi-Threading (threads.js)
 - [x] Sort
-- [ ] Map
-- [ ] Reduce
-- [ ] Extra Filter after Sort/Map/Reduce
-- [ ] more usable events for plugin usage
+- [x] Map
+- [x] Reduce
+- [x] Extra Filter after Sort/Map/Reduce
+- [x] more usable events for plugin usage
 - [ ] authentication
 - [ ] performance optimization
 
