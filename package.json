@@ -1,6 +1,6 @@
 {
   "name": "filterdb",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "filterdb is an fully extendable no-SQL database completly written in node.js. Data could be accessed with JS-Array like find/filter Syntax. So there is no need to learn a new QueryLanguage.",
   "type": "module",
   "main": "lib/Database.js",
