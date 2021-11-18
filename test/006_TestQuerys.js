@@ -21,10 +21,12 @@ describe("Querys", () => {
         await db.table("persons").ensureIndex("name");
 
 
-        await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        await db.table("persons").save({name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        maxMustermann = await db.table("persons").save({name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({_id: 1, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({_id: 2, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({_id: 3, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+
+        await db.table("persons").save({_id: 4,name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        maxMustermann = 4
         
     });
 
@@ -87,7 +89,7 @@ describe("Querys", () => {
     describe("(row) => { return row.name === name && row.birthdate === birthdate }", async () => {
         let name = "Maxi Mustermann"
         let birthdate = "1976-02-01T00:00:00.000Z"
-        let result
+        let result;
 
         before(async () => {
             result = await db.table("persons").filter((row) => { 
@@ -110,6 +112,32 @@ describe("Querys", () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
             expect(q.interpreterNeeded).to.be.equal(true)
+        });
+    });
+
+    describe("(row) => { return row.name !== name }", async () => {
+        let name = "Maxi Mustermann"
+        let result
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return row.name !== name
+            }, { name })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(1);
+        });
+
+        it("should find entry with correct data", async () => {
+            expect(result[0].name).to.be.not.equal(name);
+            expect(result[0]._id).to.be.equal(maxMustermann);
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.name).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
         });
     });
 })
