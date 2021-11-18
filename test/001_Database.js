@@ -118,12 +118,5 @@ describe("Database (class)", () => {
                 next();
             })
         });
-        it("should delete 'database'.meta.json", (next) => {
-            fs.readFile(`./storage/${dbname}.meta.json`).then(() => { 
-                throw Error('should error');
-            }).catch(() => {
-                next();
-            })
-        });
     });
 });

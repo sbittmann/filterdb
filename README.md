@@ -159,6 +159,10 @@ import Cluster from "filterdb/plugins/Cluster"
 - [x] Index support for && and || operators
 - [x] plugins
 - [x] Multi-Threading (threads.js)
+- [x] Sort
+- [ ] Map
+- [ ] Reduce
+- [ ] Extra Filter after Sort/Map/Reduce
 - [ ] more usable events for plugin usage
 - [ ] authentication
 - [ ] performance optimization

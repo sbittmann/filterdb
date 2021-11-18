@@ -7,7 +7,7 @@ import { expect } from "chai";
 let dbname = "serverTest";
 let port = 9091
 
-describe("Server", () => {
+describe("Server (plugin)", () => {
     let db;
     before(async () => {
         try {
