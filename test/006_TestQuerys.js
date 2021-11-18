@@ -19,13 +19,14 @@ describe("Querys", () => {
 
         db = await new Database(dbname);
         await db.table("persons").ensureIndex("name");
+        await db.table("persons").ensureIndex("activeSince");
 
 
-        await db.table("persons").save({_id: 1, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        await db.table("persons").save({_id: 2, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
-        await db.table("persons").save({_id: 3, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({_id: 1, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2001});
+        await db.table("persons").save({_id: 2, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2002});
+        await db.table("persons").save({_id: 3, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2003});
 
-        await db.table("persons").save({_id: 4,name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z"});
+        await db.table("persons").save({_id: 4,name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2004});
         maxMustermann = 4
         
     });
@@ -137,6 +138,33 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
+        });
+    });
+
+    describe("(row) => { return row.activeSince > activeSince }", async () => {
+        let result
+        let activeSince = 2002
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return row.activeSince > activeSince 
+            }, { activeSince })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(2);
+        });
+
+        it("should find entry with correct data", async () => {
+            for(let row of result) {
+                expect(row.activeSince).to.be.greaterThan(activeSince);
+            }
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.activeSince).to.be.gte(1);
             expect(q.interpreterNeeded).to.be.equal(false)
         });
     });
