@@ -168,4 +168,85 @@ describe("Querys", () => {
             expect(q.interpreterNeeded).to.be.equal(false)
         });
     });
+
+    describe("(row) => { return row.activeSince >= activeSince }", async () => {
+        let result
+        let activeSince = 2002
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return row.activeSince >= activeSince 
+            }, { activeSince })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(3);
+        });
+
+        it("should find entry with correct data", async () => {
+            for(let row of result) {
+                expect(row.activeSince).to.be.greaterThanOrEqual(activeSince);
+            }
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.activeSince).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
+        });
+    });
+
+    describe("(row) => { return row.activeSince < activeSince }", async () => {
+        let result
+        let activeSince = 2002
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return row.activeSince < activeSince 
+            }, { activeSince })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(1);
+        });
+
+        it("should find entry with correct data", async () => {
+            for(let row of result) {
+                expect(row.activeSince).to.be.lessThan(activeSince);
+            }
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.activeSince).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
+        });
+    });
+
+    describe("(row) => { return row.activeSince <= activeSince }", async () => {
+        let result
+        let activeSince = 2002
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return row.activeSince <= activeSince 
+            }, { activeSince })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(2);
+        });
+
+        it("should find entry with correct data", async () => {
+            for(let row of result) {
+                expect(row.activeSince).to.be.lessThanOrEqual(activeSince);
+            }
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.activeSince).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
+        });
+    });
 })
