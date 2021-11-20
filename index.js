@@ -6,16 +6,32 @@ import faker from "faker";
 
 (async () => {
     let db = await new Database("test");
-    for(let i = 0; i < 1; i++) {
-        await db.table("persons").save({id: i, name: "Max Mustermann"})
+    await db.table("persons").ensureIndex("name");
+
+    await db.table("persons").save({_id: 1, name: "Max Mustermann"})
+    await db.table("persons").save({_id: 2, name: "Max Mustermann"})
+    await db.table("persons").save({_id: 3, name: "Max Mustermann"})
+    await db.table("persons").save({_id: 4, name: "Maxi Mustermann", friends: [1, 2]})
+    try {
+        await db.table("persons").filter((row) => { return row.name === "Maxi Mustermann" }).map(`(row) => { return db.table() }`);
+        /*let data1 = await db.table("persons").filter((row) => { return row.name === name }, {names: "Maxi Mustermann"})
+        console.dir(data1, {depth: null})*/
+    } catch (e) {
+        console.log(e)
     }
     
-    let data1 = await db.table("persons").filter((row) => { return row.name == "Max Mustermann" }).map(row => { return {id: row.id} })
-    let data2 = await db.table("persons").filter((row) => { return row.name == "Max Mustermann" }).map(row => { return row.id })
-    console.log(data1)
-    console.log(data2)
-    //.sort((a, b) => { return a.id > b.id? -1 : a.id < b.id? 1 : 0})
-    //.reduce((t, row) => t + row, 0)
+    /*.map((row) => { 
+        let friends = row.friends.map((friend) => {
+            db.table("persons").find((row) => { 
+                return row._id === friend 
+            }, {   
+                friendl
+            })
+        })
+        return { ...row, friends} 
+    })*/
+    
+    //console.log(data1.getQuery())
 
     await db.delete();
     return;

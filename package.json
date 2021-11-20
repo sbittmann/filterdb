@@ -5,8 +5,8 @@
   "type": "module",
   "main": "lib/Database.js",
   "scripts": {
-    "test": "c8 --check-coverage --lines 50 --functions 50 --branches 50 mocha ./test/**/*.js",
-    "ci": "c8 --check-coverage --lines 50 --functions 50 --branches 50 --reporter=lcovonly mocha ./test/**/*.js && codecov",
+    "test": "c8 --check-coverage --lines 50 --functions 50 --branches 50 mocha --recursive test/",
+    "ci": "c8 --check-coverage --lines 50 --functions 50 --branches 50 --reporter=lcovonly mocha --recursive test/ && codecov",
     "release": "np"
   },
   "repository": {
