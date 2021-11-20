@@ -1,4 +1,4 @@
-import Database from "../lib/Database.js";
+import Database from "../../lib/Database.js";
 import fs from "fs/promises";
 import { expect } from "chai";
 
@@ -27,6 +27,7 @@ describe("Querys", () => {
         await db.table("persons").save({_id: 3, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2003});
 
         await db.table("persons").save({_id: 4,name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2004});
+        await db.table("persons").save({_id: 5,name: "Norman Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2005});
         maxMustermann = 4
         
     });
@@ -126,8 +127,8 @@ describe("Querys", () => {
             }, { name })
         });
         
-        it("should find one entry", async () => {
-            expect(result.length).to.be.equal(1);
+        it("should find 2 entries", async () => {
+            expect(result.length).to.be.equal(2);
         });
 
         it("should find entry with correct data", async () => {
@@ -152,8 +153,8 @@ describe("Querys", () => {
             }, { activeSince })
         });
         
-        it("should find one entry", async () => {
-            expect(result.length).to.be.equal(2);
+        it("should find 3 entry", async () => {
+            expect(result.length).to.be.equal(3);
         });
 
         it("should find entry with correct data", async () => {
@@ -179,8 +180,8 @@ describe("Querys", () => {
             }, { activeSince })
         });
         
-        it("should find one entry", async () => {
-            expect(result.length).to.be.equal(3);
+        it("should find 4 entries", async () => {
+            expect(result.length).to.be.equal(4);
         });
 
         it("should find entry with correct data", async () => {

@@ -1,5 +1,6 @@
 import Database from "../lib/Database.js";
 import fs from "fs/promises";
+import { shouldThrow } from "./utils.js"
 import { expect } from "chai";
 
 let dbname = "tableTest";
@@ -69,7 +70,7 @@ describe("Table (class)", () => {
             expect(updateId).to.be.equal(id);
         });
     });
-    describe(".get(value)", () => {
+    describe(".get(id)", () => {
         it("should return object by id", async () => {
             let id = "testId123456789"
             await db.table(tableName).save({_id: id, test: true})
@@ -83,10 +84,10 @@ describe("Table (class)", () => {
             let id = await db.table(tableName).save({test: true});
             await db.table(tableName).remove(id);
             let val = await db.table(tableName).get(id);
-            expect(val).to.be.equal(null);
+            expect(val).to.be.equal(undefined);
         });
     });
-    describe(".find(id)", () => {
+    describe(".find(query, context)", () => {
         it("should find inserted object", async () => {
             let name = "Max Mustermann";
             let id = await db.table(tableName).save({name: name});
@@ -166,6 +167,72 @@ describe("Table (class)", () => {
             expect(result).to.be.a("object");
             expect(result.notIndexed).to.be.equal(notIndexed);
             expect(result._id).to.be.equal(id);
-        })
+        });
+
+        it("should work with Object Property", async () => { 
+            let name = "Max Musterfrau"
+            let id = await db.table(tableName).save({name});
+
+            let result = await db.table(tableName).find((l) => { 
+                return l.name === obj.test;
+            }, { 
+                obj: {
+                    test: name
+                }
+            });
+
+            expect(result).to.be.a("object");
+            expect(result.name).to.be.equal(name);
+            expect(result._id).to.be.equal(id);
+        });
+
+        it("should work on complex Query without index usage", async () => { 
+            let id = await db.table(tableName).save({complexQuery: true});
+
+            let result = await db.table(tableName).find((l) => { 
+                if(l.complexQuery === true) {
+                    return true
+                }
+                return false
+            });
+
+            expect(result).to.be.a("object");
+            expect(result.complexQuery).to.be.equal(true);
+            expect(result._id).to.be.equal(id);
+        });
+
+
+        it("should throw Error on unkown var", async () => { 
+            await shouldThrow(async () => {
+                let result = await db.table(tableName).find((l) => { return name })
+            })
+        });
+
+        it("should throw Error on interpreter Error", async () => { 
+            await shouldThrow(async () => {
+                let result = await db.table(tableName).find(`(l) => { return l.nested.nested.not.there}`)    
+            })
+        });
+
+        it("should throw Error on interpreter Error with index", async () => { 
+            await db.table(tableName).ensureIndex("throwTest");
+            await db.table(tableName).save({throwTest: true});
+
+            await shouldThrow(async () => {
+                let result = await db.table(tableName).find(`(l) => { return l.throwTest === true && l.nested.nested.not.there === false}`);
+            })
+        });
+
+        it("should throw Error on not correct JS-code", async () => { 
+            await shouldThrow(async () => {
+                let result = await db.table(tableName).find(`(l => { return l.name }`)    
+            })
+        });
+
+        it("should throw Error on Query not a function", async () => { 
+            await shouldThrow(async () => {
+                let result = await db.table(tableName).find(`{test: true}`)    
+            })
+        });
     });
 });

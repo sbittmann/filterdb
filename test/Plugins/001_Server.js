@@ -1,5 +1,5 @@
-import Database from "../lib/Database.js";
-import Server from "../plugins/Server.js";
+import Database from "../../lib/Database.js";
+import Server from "../../plugins/Server.js";
 import fs from "fs/promises";
 import axios from "axios"
 import { expect } from "chai";
@@ -63,7 +63,7 @@ describe("Server (plugin)", () => {
 
             await axios.delete(`http://localhost:${port}/table/persons/${id}`)
             
-            expect(await db.table("persons").get(id)).to.be.equal(null);
+            expect(await db.table("persons").get(id)).to.be.equal(undefined);
         });
     });
 

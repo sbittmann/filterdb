@@ -1,6 +1,7 @@
 import Database from "../lib/Database.js";
 import Query from "../lib/Query.js";
 import fs from "fs/promises";
+import { shouldThrow } from "./utils.js"
 import { expect } from "chai";
 
 let dbname = "queryTest";
@@ -16,11 +17,15 @@ describe("Query (class)", () => {
         } catch {}
 
         db = await new Database(dbname);
+        await db.table("test").ensureIndex("test")
+
         let p = []
         for(let i = 0; i < tableLength; i++) {
             p.push(db.table("test").save({index: i, test: true}));
         }
+        p.push(db.table("test").save({index: -1, test: false}));
         await Promise.all(p);
+
     });
     after(async () => {
         await db.delete();
@@ -59,6 +64,11 @@ describe("Query (class)", () => {
         it("should have same length", async () => {
             expect(dbSort.length).to.be.equal(arraySort.length);
         });
+        it("should throw on incorret query", async () => {
+            await shouldThrow(async () => {
+                await db.table("test").filter((row) => { return row.index <= 10 }).sort(`(a,b) => { return name }`);
+            }) ;
+        });
     });
 
     describe(".map(mapFunction)", () => {
@@ -85,6 +95,11 @@ describe("Query (class)", () => {
         it("should have same length", async () => {
             expect(dbMap.length).to.be.equal(arrayMap.length);
         });
+        it("should throw on incorret query", async () => {
+            await shouldThrow(async () => {
+                await db.table("test").filter((row) => { return row.test === false }).map(`(row) => { return name }`);
+            });
+        });
     });
     
     describe(".reduce(reduceFunction)", () => {
@@ -106,6 +121,11 @@ describe("Query (class)", () => {
         it("should reduce", async () => {
             expect(arrayReduce).to.be.equal(dbReduce);
         });
+        it("should throw on incorret query", async () => {
+            await shouldThrow(async () => {
+                await db.table("test").filter((row) => { return row.test === false }).reduce(`(row) => { return name }`);
+            });   
+        });
     });
 
     describe(".filter(filterFunction)", () => {
@@ -124,10 +144,15 @@ describe("Query (class)", () => {
             let reduced = db.table("test").filter(filter).filter(filter2)
             expect(reduced).to.be.instanceOf(Query);
         });
-        it("should reduce", async () => {
+        it("should filter", async () => {
             for(let i = 0; i < tableLength; i++) {
                 expect(dbFilter[i]).to.be.eql(arrayFilter[i]);
             }
+        });
+        it("should throw on incorret query", async () => {
+            await shouldThrow(async () => {
+                await db.table("test").filter((row) => { return row.test === false }).filter(`(row) => { return name }`);
+            });
         });
     });
 });

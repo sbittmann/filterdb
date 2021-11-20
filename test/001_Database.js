@@ -2,7 +2,10 @@ import Database from "../lib/Database.js";
 import Table from "../lib/Table.js";
 import Backup from "../lib/Backup.js";
 import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from 'url';
 import Server from "../plugins/Server.js";
+import {shouldThrow } from "./utils.js"
 import { expect } from "chai";
 
 let dbname = "databaseTest";
@@ -58,9 +61,20 @@ describe("Database (class)", () => {
         });
     });
     describe(".meta", () => {
-        it("should return correct meta info", async () => {
-            let meta = db.meta
-            expect(meta.name).to.be.equal(dbname);
+        let __dirname = path.dirname(fileURLToPath(import.meta.url));
+        let pack;
+        before(async () => {
+            pack = JSON.parse(await fs.readFile(path.join(__dirname, "..", "package.json"), "utf8"));
+        })
+
+        it("should return correct name", async () => {    
+            expect(db.meta.name).to.be.equal(dbname);
+        });
+        it("should return correct version", async () => {    
+            expect(db.meta.version).to.be.equal(pack.version);
+        });
+        it("should have table object", async () => {    
+            expect(db.meta.tables).to.be.a("object");
         });
     });
 
@@ -83,39 +97,19 @@ describe("Database (class)", () => {
         before(async () => {
             await db.delete();
         });
-        it("should throw on get meta data", (next) => {
-            let thrown = false;
-            try {
+        it("should throw on get meta data", async () => {
+            await shouldThrow(() => {
                 let meta = db.meta;
-            } catch {
-                thrown = true
-            }
-            
-            if(thrown) {
-                next();
-                return
-            }
-            throw Error('should error');
+            })
         });
-        it("should throw on table", (next) => {
-            let thrown = false
-            try {
+        it("should throw on table", async () => {
+            await shouldThrow(() => {
                 let table = db.table("test");
-            } catch {
-                thrown = true
-            }
-
-            if(thrown) {
-                next();
-                return
-            }
-            throw Error('should error');
+            })
         });
-        it("should delete database files", (next) => {
-            fs.readdir(`./storage/${dbname}`).then(() => { 
-                throw Error('should error');
-            }).catch(() => {
-                next();
+        it("should delete database files", async () => {
+            await shouldThrow(async () => {
+                await fs.readdir(`./storage/${dbname}`)
             })
         });
     });
