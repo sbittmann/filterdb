@@ -12,8 +12,9 @@ import faker from "faker";
     await db.table("persons").save({_id: 2, name: "Max Mustermann"})
     await db.table("persons").save({_id: 3, name: "Max Mustermann"})
     await db.table("persons").save({_id: 4, name: "Maxi Mustermann", friends: [1, 2]})
+    console.log(db._db.db)
     try {
-        await db.table("persons").filter((row) => { return row.name === "Maxi Mustermann" }).map(`(row) => { return db.table() }`);
+        //await db.table("persons").filter((row) => { return row.name === "Maxi Mustermann" }).map(`(row) => { return db.table() }`);
         /*let data1 = await db.table("persons").filter((row) => { return row.name === name }, {names: "Maxi Mustermann"})
         console.dir(data1, {depth: null})*/
     } catch (e) {
