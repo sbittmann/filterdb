@@ -2,37 +2,29 @@ import Database from "./lib/Database.js";
 import { performance } from 'perf_hooks';
 import Server from "./plugins/Server.js";
 import axios from "axios";
-import faker from "faker";
 
 (async () => {
     let db = await new Database("test");
     await db.table("persons").ensureIndex("name");
 
     await db.table("persons").save({_id: 1, name: "Max Mustermann"})
-    await db.table("persons").save({_id: 2, name: "Max Mustermann"})
+    await db.table("persons").save({_id: 2, name: "Max Mustermanns"})
     await db.table("persons").save({_id: 3, name: "Max Mustermann"})
     await db.table("persons").save({_id: 4, name: "Maxi Mustermann", friends: [1, 2]})
-    console.log(db._db.db)
+    await db.table("persons").save({_id: 5, name: "Maxi Mustermann", friends: [1, 2]})
     try {
-        //await db.table("persons").filter((row) => { return row.name === "Maxi Mustermann" }).map(`(row) => { return db.table() }`);
-        /*let data1 = await db.table("persons").filter((row) => { return row.name === name }, {names: "Maxi Mustermann"})
-        console.dir(data1, {depth: null})*/
+        let name = "Max Mustermann"
+        let name2 = "Maxi Mustermann"
+        let result = await db.table("persons").filter(
+            (row) => { (row) => { return  [name, name2].includes(row.name) } }
+        , { name, name2 })
+
+        console.log(result.getQuery())
+        console.dir(result, {depth: null})
+        
     } catch (e) {
         console.log(e)
     }
-    
-    /*.map((row) => { 
-        let friends = row.friends.map((friend) => {
-            db.table("persons").find((row) => { 
-                return row._id === friend 
-            }, {   
-                friendl
-            })
-        })
-        return { ...row, friends} 
-    })*/
-    
-    //console.log(data1.getQuery())
 
     await db.delete();
     return;

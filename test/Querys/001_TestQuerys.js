@@ -62,6 +62,32 @@ describe("Querys", () => {
         });
     });
 
+    describe("(row) => { return name === row.name }", async () => {
+        let name = "Max Mustermann"
+        let result
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return  name === row.name
+            }, { name })
+        });
+        
+        it("should find one entry", async () => {
+            expect(result.length).to.be.equal(1);
+        });
+
+        it("should find entry with correct data", async () => {
+            expect(result[0].name).to.be.equal(name);
+            expect(result[0]._id).to.be.equal(maxMustermann);
+        });
+
+        it("should use index without interpreter", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.name).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false);
+        });
+    });
+
     describe("(row) => row.name === name", async () => {
         let name = "Max Mustermann"
         let result
@@ -114,6 +140,67 @@ describe("Querys", () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
             expect(q.interpreterNeeded).to.be.equal(true)
+        });
+    });
+
+    describe("(row) => { return row.name === name || row.activeSince === activeSince }", async () => {
+        let name = "Maxi Mustermann"
+        let activeSince = 2004
+        let result;
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return row.name === name || row.activeSince === activeSince
+            }, { name, activeSince })
+        });
+        
+        it("should find 4 entries only", async () => {
+            expect(result.length).to.be.equal(4);
+        });
+
+        it("should find entry with correct data", async () => {
+            for(let row of result) {
+                expect(row).to.satisfy((row) => { 
+                    return (row.activeSince == activeSince || row.name == name);
+                })
+            }
+        });
+
+        it("should use index without interprete", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.name).to.be.gte(1);
+            expect(q.indexes.activeSince).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
+        });
+    });
+
+    describe("(row) => { return [name, name2].includes(row.name) }", async () => {
+        let name = "Maxi Mustermann"
+        let name2 = "Max Mustermann"
+        let result;
+
+        before(async () => {
+            result = await db.table("persons").filter((row) => { 
+                return [name, name2].includes(row.name)
+            }, { name, name2 })
+        });
+        
+        it("should find 4 entries only", async () => {
+            expect(result.length).to.be.equal(4);
+        });
+
+        it("should find entry with correct data", async () => {
+            for(let row of result) {
+                expect(row).to.satisfy((row) => { 
+                    return (row.name == name2 || row.name == name);
+                })
+            }
+        });
+
+        it("should use index without interprete", async () => {
+            let q = result.getQuery();
+            expect(q.indexes.name).to.be.gte(1);
+            expect(q.interpreterNeeded).to.be.equal(false)
         });
     });
 
