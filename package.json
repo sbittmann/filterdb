@@ -35,7 +35,7 @@
     "minimist": "^1.2.5",
     "nanoid": "^3.2.0",
     "threads": "^1.7.0",
-    "vm2": "^3.9.6",
+    "vm2": "^3.9.7",
     "ws": "^8.5.0"
   },
   "devDependencies": {
