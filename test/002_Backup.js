@@ -33,6 +33,7 @@ describe("Backup (class)", () => {
         let backup
         before(async () => {
             await db.backup.create("storage/backup/");
+            console.log(await fs.readdir(`./storage/`));
             backup = await new Database("backup");
         })
         after(async () => {
