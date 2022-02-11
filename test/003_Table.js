@@ -36,26 +36,42 @@ describe("Table (class)", () => {
         });
     });
     describe(".ensureIndex(name)", () => {
-        it("should create an Index", async () => {
+        let id;
+        before(async () => {
             await db.table(tableName).ensureIndex("name");
             await db.table(tableName).ensureIndex("test");
-        });
-        it("should create an Index on already inserted data", async () => {
-            let id = await db.table(tableName).save({title: "Mr."})
-            await db.table(tableName).ensureIndex("title");
-            let data = await db.table(tableName).find((row) => { return row.title === "Mr." });
 
+            id = await db.table(tableName).save({title: "Mr."})
+            await db.table(tableName).ensureIndex("title");
+        })
+        it("should create an Index", async () => {
+            let meta = db.table(tableName).meta
+            expect(meta.indexes.name.build).to.be.equal(true);
+            expect(meta.indexes.test.build).to.be.equal(true);
+        });
+
+        it("should create an Index on already inserted data", async () => {
+            let data = await db.table(tableName).find((row) => { return row.title === "Mr." });
             expect(data.title).to.be.equal("Mr.");
             expect(data._id).to.be.equal(id);
             expect(data.getQuery().indexes.title).to.be.gte(0);
         });
     });
     describe(".removeIndex(name)", () => {
-        it("should delete an Index", async () => {
+        before(async () => {
             await db.table(tableName).removeIndex("title");
+        })
+        
+        it("should delete an Index", async () => {
+            let meta = db.table(tableName).meta
+            expect(meta.indexes.title).to.be.equal(undefined);
         });
+
         it("shouldn't use deleted index", async () => {
             let data = await db.table(tableName).find((row) => { return row.title === "Mr." });
+            let q = data.getQuery();
+            expect(q.indexes.title).to.be.equal(undefined);
+            expect(q.interpreterNeeded).to.be.equal(true);
         });
     });
     describe(".save(value)", () => {

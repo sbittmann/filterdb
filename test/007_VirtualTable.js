@@ -23,9 +23,15 @@ describe("VirtualTable (class)", () => {
     });
 
     describe(".meta", () => {
-        it("should return same as no virtual Table", async () => {
-            let meta = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").meta }`);
-            expect(meta[0]).to.be.eql(db.table("test").meta);
+        let virtualMeta;
+        let meta;
+        before(async () => {
+            virtualMeta = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").meta }`);
+            meta = db.table("test").meta
+        })
+
+        it("should return same as no virtual Table", async () => {    
+            expect(virtualMeta[0]).to.be.eql(meta);
         });
     })
 

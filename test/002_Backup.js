@@ -31,14 +31,17 @@ describe("Backup (class)", () => {
     });
     describe(".create(filepath)", () => {
         let backup
+        before(async () => {
+            await db.backup.create("storage/backup/");
+            backup = await new Database("backup");
+        })
         after(async () => {
             await backup.delete();
         });
 
         it("should create BackUp with data", async () => {
-            await db.backup.create("storage/backup/");
-            backup = await new Database("backup");
             let data = await backup.table("test").get(id);
+            console.log(id, data)
             expect(data).to.be.a("object");
             expect(data.backUpTest).to.be.equal(true);
         });
