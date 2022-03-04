@@ -8,6 +8,7 @@
 This is an fully extendable no-SQL database completly written in node.js. Data could be accessed with JS-Array like find/filter Syntax. So there is no need to learn a new QueryLanguage.
 
 ## Installation
+
 ```bash
 npm install filterdb
 ```
@@ -17,60 +18,84 @@ npm install filterdb
 If you just need a Database-Server and don't wan't to build the access Level around it, stay updated. Soon we will build a ready server-build.
 
 ## Usage
+
 ```js
-import Database from "filterdb"
+import Database from "filterdb";
 import faker from "faker";
 
 (async () => {
+    //creates or opens Database
+    let db = await new Database("myDB");
 
-//creates or opens Database
-let db = await new Database("myDB");
+    for (let i = 0; i < 1000; i++) {
+        //Push data in the "persons" table.
+        await db.table("persons").save(faker.helpers.userCard());
+    }
 
-for (let i = 0; i < 1000; i++) {
-    //Push data in the "persons" table.
-    await db.table("persons").save(faker.helpers.userCard());
-}
+    //Yeap, simple Array.filter Syntax
+    let resultArray = await db.table("persons").filter((row) => row.name === val);
+    console.log(resultArray);
 
-//Yeap, simple Array.filter Syntax
-let resultArray = await db.table("persons").filter((row) => row.name === val)
-console.log(resultArray)
+    //Aync Iteratoion  possible
+    let r2 = db.table("persons").filter((row) => {
+        return row.website === "filterdb.io";
+    });
 
-//Aync Iteratoion  possible
-let r2 = db.table("persons").filter((row) => {
-    return row.website === 'filterdb.io';
-});
-    
-for await(let row of r2) {
-    console.log(row)
-}
+    for await (let row of r2) {
+        console.log(row);
+    }
 
-for (let i = 0; i < 100; i++) {
-    await db.table("numbers").save({num: i});
-}
-//Sort your data
-let resultSort = await db.table("numbers").filter((row) => row.num <= 50).sort((a, b) => { a.num < b.num? -1 : a.num > b.num? 1 : 0});
-console.log(resultSort)
-//Map your data
-let resultMap = await db.table("numbers").filter((row) => row.num <= 50).map((row) => { return row.num*2 });
-console.log(resultMap)
-//Reduce your data
-let resultSortMapReduce = await db.table("numbers").filter((row) => row.num <= 50).reduce((total, row) => { return total + row.num });
-console.log(resultReduce)
+    for (let i = 0; i < 100; i++) {
+        await db.table("numbers").save({ num: i });
+    }
+    //Sort your data
+    let resultSort = await db
+        .table("numbers")
+        .filter((row) => row.num <= 50)
+        .sort((a, b) => {
+            a.num < b.num ? -1 : a.num > b.num ? 1 : 0;
+        });
+    console.log(resultSort);
+    //Map your data
+    let resultMap = await db
+        .table("numbers")
+        .filter((row) => row.num <= 50)
+        .map((row) => {
+            return row.num * 2;
+        });
+    console.log(resultMap);
+    //Reduce your data
+    let resultSortMapReduce = await db
+        .table("numbers")
+        .filter((row) => row.num <= 50)
+        .reduce((total, row) => {
+            return total + row.num;
+        });
+    console.log(resultReduce);
 
-//All functions could be chained too
-let resultMapReduce = await db.table("numbers").filter((row) => row.num <= 50).map((row) => { return row.num*2 }).reduce((total, num) => { return total + num })
-console.log(resultMapReduce)
-})()
-
+    //All functions could be chained too
+    let resultMapReduce = await db
+        .table("numbers")
+        .filter((row) => row.num <= 50)
+        .map((row) => {
+            return row.num * 2;
+        })
+        .reduce((total, num) => {
+            return total + num;
+        });
+    console.log(resultMapReduce);
+})();
 ```
 
 ## API
 
 ### `Database`
+
 An filterdb Database instance is created with by using `default` export from the main module:
+
 ```js
-import Database from "filterdb"
-import Server from "filterdb/plugins/Server"
+import Database from "filterdb";
+import Server from "filterdb/plugins/Server";
 
 (async () => {
     //create database with options
@@ -80,125 +105,156 @@ import Server from "filterdb/plugins/Server"
         plugins: [],
     });
     //extend Database with Http-Server plugin
-    db.extend(new Server({
-        port: 8080
-    }))
-})()
+    db.extend(
+        new Server({
+            port: 8080,
+        }),
+    );
+})();
 ```
 
 #### `db.meta`
+
 This will return some meta-data about your database.
 
 #### `db.table(tableName)`
+
 returns a Table-Class
 
 #### `db.extend(plugin)`
+
 extends the database with the `plugin`
 
 #### `await db.close()`
-closes the database   
+
+closes the database
 
 #### `await db.delete()`
-deletes the dataBase   
+
+deletes the dataBase
 
 ### `Table`
+
 An filterdb Table instance is created with by using the `table` function from the dataBase Instance:
+
 ```js
-import Database from "filterdb"
+import Database from "filterdb";
 
 (async () => {
     let db = await new Database("myDB");
     let table = db.table("tableName");
-})()
+})();
 ```
 
 #### `table.meta`
+
 This will return some meta-data about your table.
 
 #### `await table.get(_id)`
-returns the stored object in the table with _id in arguments
+
+returns the stored object in the table with \_id in arguments
 
 #### `await table.ensureIndex(name, rebuild?)`
+
 creates a index on the object field `name` and rebuilds the index if rebuild is set to `true`
 
 #### `await table.find(searchFunction, functionContext)`
+
 returns the first row in table for which `searchFunction` returns true
 
 #### `await table.filter(searchFunction, functionContext)`
+
 returns all rows in table for which `searchFunction` returns true
 
 #### `await table.save(obj)`
+
 saves `obj` into the table. if `obj._id` is not present then the id will be autogenerated.
 returns the id of inserted obj.
 
 #### `await table.remove(_id)`
+
 removes obj with id `_id` from the table
 
 ## Plugins
 
 ### http-server based on fastify
+
 ```js
-import Database from "filterdb"
-import Server from "filterdb/plugins/Server"
+import Database from "filterdb";
+import Server from "filterdb/plugins/Server";
 
 (async () => {
     let db = await new Database("myDB");
-    db.extend(new Server({
-        port: 8080
-    }))
-})()
+    db.extend(
+        new Server({
+            port: 8080,
+        }),
+    );
+})();
 ```
 
 ###
+
 ```js
-import Database from "filterdb"
-import Cluster from "filterdb/plugins/Cluster"
+import Database from "filterdb";
+import Cluster from "filterdb/plugins/Cluster";
 
 (async () => {
     let db1 = await new Database("db1");
     let db2 = await new Database("db2");
 
-    db1.extend(new Cluster({
-        port: 9000,
-    }))
+    db1.extend(
+        new Cluster({
+            port: 9000,
+        }),
+    );
 
-    db2.extend(new Cluster({
-        port: 9001,
-        join: "172.0.0.1:9000"
-    }));
-})()
+    db2.extend(
+        new Cluster({
+            port: 9001,
+            join: "172.0.0.1:9000",
+        }),
+    );
+})();
 ```
 
 ## In progress
 
 ### main-package
-- [x] Index support for && and || operators
-- [x] plugins
-- [x] Multi-Threading (threads.js)
-- [x] Sort
-- [x] Map
-- [x] Reduce
-- [x] Extra Filter after Sort/Map/Reduce
-- [x] more usable events for plugin usage
-- [ ] authentication
-- [ ] performance optimization
 
+-   [x] Index support for && and || operators
+-   [x] plugins
+-   [x] Multi-Threading (threads.js)
+-   [x] Sort
+-   [x] Map
+-   [x] Reduce
+-   [x] Extra Filter after Sort/Map/Reduce
+-   [x] more usable events for plugin usage
+-   [x] authentication
+-   [ ] CI Failing on Backup but no problems on win32 tests
+-   [ ] add Simple sort syntax maybe something like this: `db.table().find(row => row.name == "test").sort(row => row.status, 1)`
+-   [ ] performance optimization
+-   [ ] remove thread.js and create own ThreadPool due to stability
+-   [ ] CLI-Interface
+-   [ ] REPL-Interface
 
 ### httpServer-Plugin
-- [x] full REST-API with fastify 
-- [ ] realtime-API with websockets
-- [ ] client package
-- [ ] UI
+
+-   [x] full REST-API with fastify
+-   [x] client package `npm install filterdb-client`
+-   [ ] realtime-API with websockets or SSE
+-   [ ] UI
 
 ### cluster-Plugin
-- [ ] creation
-- [ ] keep WebSocket Communication or switch to tcp?
-- [ ] Stability-Checks
-- [ ] Load-Balancing
-- [ ] ...
+
+-   [ ] creation
+-   [ ] Stability-Checks
+-   [ ] Load-Balancing
+-   [ ] ...
 
 ## Contributing
-It's hard getting this working, but maybe you have some time and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further. Contribution is always welcome.
+
+It's hard bringing this thing to life, but maybe you have some time and like the idea behind this project. Every created issue, feature, bugfix, test and docs will help to get filterdb one step further. Contribution is always welcome.
 
 1.  Create a fork
 2.  Create your feature branch: `git checkout -b my-feature`
@@ -207,4 +263,5 @@ It's hard getting this working, but maybe you have some time and like the idea b
 5.  Submit a pull request 🚀
 
 ## License
+
 This library is licensed under the terms of the MIT license.

@@ -6,7 +6,7 @@ let dbname = "vmTableTest";
 
 describe("VirtualTable (class)", () => {
     let db;
-    let entry = {_id: "testId", test: true}
+    let entry = { _id: "testId", test: true };
     before(async () => {
         try {
             await fs.rm(`./storage/${dbname}`, {
@@ -26,41 +26,96 @@ describe("VirtualTable (class)", () => {
         let virtualMeta;
         let meta;
         before(async () => {
-            virtualMeta = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").meta }`);
-            meta = db.table("test").meta
-        })
+            virtualMeta = await db
+                .table("test")
+                .filter((row) => {
+                    return row.test === true;
+                })
+                .map((row) => {
+                    return db.table("test").meta();
+                });
+            meta = db.table("test").meta();
+        });
 
-        it("should return same as no virtual Table", async () => {    
+        it("should return same as no virtual Table", async () => {
             expect(virtualMeta[0]).to.be.eql(meta);
         });
-    })
+    });
 
     describe(".get(id)", () => {
         it("should return entry by id", async () => {
-            let get = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").get(id) }`, {id: entry._id});
+            let get = await db
+                .table("test")
+                .filter((row) => {
+                    return row.test === true;
+                })
+                .map(
+                    (row) => {
+                        return db.table("test").get(id);
+                    },
+                    {
+                        id: entry._id,
+                    },
+                );
             expect(get[0]).to.be.eql(entry);
         });
         it("should return undefined if id not avaiable", async () => {
-            let get = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").get(id) }`, {id: 50});
-            expect(get[0]).to.be.equal(undefined)
+            let get = await db
+                .table("test")
+                .filter((row) => {
+                    return row.test === true;
+                })
+                .map(
+                    (row) => {
+                        return db.table("test").get(id);
+                    },
+                    {
+                        id: 50,
+                    },
+                );
+            expect(get[0]).to.be.equal(undefined);
         });
-    })
+    });
 
     describe(".find(query, context)", () => {
         it("should return entry by query", async () => {
-            let get = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").find((row) => row.test === true) }`);
+            let get = await db
+                .table("test")
+                .filter((row) => {
+                    return row.test === true;
+                })
+                .map((row) => {
+                    return db.table("test").find((row) => row.test === true);
+                });
             expect(get[0]).to.be.eql(entry);
         });
         it("should return undefined if id not avaiable", async () => {
-            let get = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").find((row) => row.test === test, {test}) }`, {test: 50});
-            expect(get[0]).to.be.equal(undefined)
+            let get = await db
+                .table("test")
+                .filter((row) => {
+                    return row.test === true;
+                })
+                .map(
+                    (row) => {
+                        return db.table("test").find((row) => row.test === test, { test });
+                    },
+                    { test: 50 },
+                );
+            expect(get[0]).to.be.equal(undefined);
         });
-    })
+    });
 
     describe(".filter(query, context)", () => {
         it("should return array from query", async () => {
-            let get = await db.table("test").filter((row) => { return row.test === true }).map(`(row) => { return db.table("test").filter((row) => row.test === true) }`);
+            let get = await db
+                .table("test")
+                .filter((row) => {
+                    return row.test === true;
+                })
+                .map((row) => {
+                    return db.table("test").filter((row) => row.test === true);
+                });
             expect(get[0][0]).to.be.eql(entry);
         });
-    })
+    });
 });

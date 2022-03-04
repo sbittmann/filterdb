@@ -13,39 +13,38 @@ describe("Querys", () => {
             await fs.rm(`./storage/${dbname}`, {
                 recursive: true,
             });
-            
         } catch {}
-        
 
         db = await new Database(dbname);
         await db.table("persons").ensureIndex("name");
         await db.table("persons").ensureIndex("activeSince");
 
+        await db.table("persons").save({ _id: 1, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2001 });
+        await db.table("persons").save({ _id: 2, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2002 });
+        await db.table("persons").save({ _id: 3, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2003 });
 
-        await db.table("persons").save({_id: 1, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2001});
-        await db.table("persons").save({_id: 2, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2002});
-        await db.table("persons").save({_id: 3, name: "Maxi Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2003});
-
-        await db.table("persons").save({_id: 4,name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2004});
-        await db.table("persons").save({_id: 5,name: "Norman Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2005});
-        maxMustermann = 4
-        
+        await db.table("persons").save({ _id: 4, name: "Max Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2004 });
+        await db.table("persons").save({ _id: 5, name: "Norman Mustermann", birthdate: "1976-02-01T00:00:00.000Z", activeSince: 2005 });
+        maxMustermann = 4;
     });
 
     after(async () => {
         await db.delete();
     });
-    
+
     describe("(row) => { return row.name === name }", async () => {
-        let name = "Max Mustermann"
-        let result
+        let name = "Max Mustermann";
+        let result;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.name === name
-            }, { name })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.name === name;
+                },
+                { name },
+            );
         });
-        
+
         it("should find one entry", async () => {
             expect(result.length).to.be.equal(1);
         });
@@ -58,20 +57,23 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return name === row.name }", async () => {
-        let name = "Max Mustermann"
-        let result
+        let name = "Max Mustermann";
+        let result;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return  name === row.name
-            }, { name })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return name === row.name;
+                },
+                { name },
+            );
         });
-        
+
         it("should find one entry", async () => {
             expect(result.length).to.be.equal(1);
         });
@@ -89,15 +91,13 @@ describe("Querys", () => {
     });
 
     describe("(row) => row.name === name", async () => {
-        let name = "Max Mustermann"
-        let result
+        let name = "Max Mustermann";
+        let result;
 
         before(async () => {
-            result = await db.table("persons").filter(
-            row => row.name === name
-            , { name })
+            result = await db.table("persons").filter((row) => row.name === name, { name });
         });
-        
+
         it("should find one entry", async () => {
             expect(result.length).to.be.equal(1);
         });
@@ -110,27 +110,30 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return row.name === name && row.birthdate === birthdate }", async () => {
-        let name = "Maxi Mustermann"
-        let birthdate = "1976-02-01T00:00:00.000Z"
+        let name = "Maxi Mustermann";
+        let birthdate = "1976-02-01T00:00:00.000Z";
         let result;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.name === name && row.birthdate === birthdate
-            }, { name, birthdate })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.name === name && row.birthdate === birthdate;
+                },
+                { name, birthdate },
+            );
         });
-        
+
         it("should find 3 entries only", async () => {
             expect(result.length).to.be.equal(3);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
+            for (let row of result) {
                 expect(row.name).to.be.equal(name);
                 expect(row.birthdate).to.be.equal(birthdate);
             }
@@ -139,30 +142,33 @@ describe("Querys", () => {
         it("should use the avaiable index and interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(true)
+            expect(q.interpreterNeeded).to.be.equal(true);
         });
     });
 
     describe("(row) => { return row.name === name || row.activeSince === activeSince }", async () => {
-        let name = "Maxi Mustermann"
-        let activeSince = 2004
+        let name = "Maxi Mustermann";
+        let activeSince = 2004;
         let result;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.name === name || row.activeSince === activeSince
-            }, { name, activeSince })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.name === name || row.activeSince === activeSince;
+                },
+                { name, activeSince },
+            );
         });
-        
+
         it("should find 4 entries only", async () => {
             expect(result.length).to.be.equal(4);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
-                expect(row).to.satisfy((row) => { 
-                    return (row.activeSince == activeSince || row.name == name);
-                })
+            for (let row of result) {
+                expect(row).to.satisfy((row) => {
+                    return row.activeSince == activeSince || row.name == name;
+                });
             }
         });
 
@@ -170,50 +176,56 @@ describe("Querys", () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
             expect(q.indexes.activeSince).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return [name, name2].includes(row.name) }", async () => {
-        let name = "Maxi Mustermann"
-        let name2 = "Max Mustermann"
+        let name = "Maxi Mustermann";
+        let name2 = "Max Mustermann";
         let result;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return [name, name2].includes(row.name)
-            }, { name, name2 })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return [name, name2].includes(row.name);
+                },
+                { name, name2 },
+            );
         });
-        
+
         it("should find 4 entries only", async () => {
             expect(result.length).to.be.equal(4);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
-                expect(row).to.satisfy((row) => { 
-                    return (row.name == name2 || row.name == name);
-                })
+            for (let row of result) {
+                expect(row).to.satisfy((row) => {
+                    return row.name == name2 || row.name == name;
+                });
             }
         });
 
         it("should use index without interprete", async () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return row.name !== name }", async () => {
-        let name = "Maxi Mustermann"
-        let result
+        let name = "Maxi Mustermann";
+        let result;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.name !== name
-            }, { name })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.name !== name;
+                },
+                { name },
+            );
         });
-        
+
         it("should find 2 entries", async () => {
             expect(result.length).to.be.equal(2);
         });
@@ -226,26 +238,29 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.name).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return row.activeSince > activeSince }", async () => {
-        let result
-        let activeSince = 2002
+        let result;
+        let activeSince = 2002;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.activeSince > activeSince 
-            }, { activeSince })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.activeSince > activeSince;
+                },
+                { activeSince },
+            );
         });
-        
+
         it("should find 3 entry", async () => {
             expect(result.length).to.be.equal(3);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
+            for (let row of result) {
                 expect(row.activeSince).to.be.greaterThan(activeSince);
             }
         });
@@ -253,26 +268,29 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.activeSince).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return row.activeSince >= activeSince }", async () => {
-        let result
-        let activeSince = 2002
+        let result;
+        let activeSince = 2002;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.activeSince >= activeSince 
-            }, { activeSince })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.activeSince >= activeSince;
+                },
+                { activeSince },
+            );
         });
-        
+
         it("should find 4 entries", async () => {
             expect(result.length).to.be.equal(4);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
+            for (let row of result) {
                 expect(row.activeSince).to.be.greaterThanOrEqual(activeSince);
             }
         });
@@ -280,26 +298,29 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.activeSince).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return row.activeSince < activeSince }", async () => {
-        let result
-        let activeSince = 2002
+        let result;
+        let activeSince = 2002;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.activeSince < activeSince 
-            }, { activeSince })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.activeSince < activeSince;
+                },
+                { activeSince },
+            );
         });
-        
+
         it("should find one entry", async () => {
             expect(result.length).to.be.equal(1);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
+            for (let row of result) {
                 expect(row.activeSince).to.be.lessThan(activeSince);
             }
         });
@@ -307,26 +328,29 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.activeSince).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
 
     describe("(row) => { return row.activeSince <= activeSince }", async () => {
-        let result
-        let activeSince = 2002
+        let result;
+        let activeSince = 2002;
 
         before(async () => {
-            result = await db.table("persons").filter((row) => { 
-                return row.activeSince <= activeSince 
-            }, { activeSince })
+            result = await db.table("persons").filter(
+                (row) => {
+                    return row.activeSince <= activeSince;
+                },
+                { activeSince },
+            );
         });
-        
+
         it("should find one entry", async () => {
             expect(result.length).to.be.equal(2);
         });
 
         it("should find entry with correct data", async () => {
-            for(let row of result) {
+            for (let row of result) {
                 expect(row.activeSince).to.be.lessThanOrEqual(activeSince);
             }
         });
@@ -334,7 +358,7 @@ describe("Querys", () => {
         it("should use index without interpreter", async () => {
             let q = result.getQuery();
             expect(q.indexes.activeSince).to.be.gte(1);
-            expect(q.interpreterNeeded).to.be.equal(false)
+            expect(q.interpreterNeeded).to.be.equal(false);
         });
     });
-})
+});
