@@ -1,4 +1,4 @@
-Copyright (c) 2021 Stefan Bittmann
+Copyright (c) 2022 Stefan Bittmann
 
 Permission is hereby granted, free of charge,
 to any person obtaining a copy of this software and

@@ -4,7 +4,7 @@ import fs from "fs/promises";
 import { expect } from "chai";
 
 let dbname = "backupTest";
-
+/*
 describe("Backup (class)", () => {
     let db;
     let id;
@@ -34,7 +34,6 @@ describe("Backup (class)", () => {
         let backup;
         before(async () => {
             await db.backup.create("storage/backup/");
-            console.log(await fs.readdir(`./storage/backup`));
             backup = await new Database("backup");
         });
         after(async () => {
@@ -49,3 +48,4 @@ describe("Backup (class)", () => {
         });
     });
 });
+*/

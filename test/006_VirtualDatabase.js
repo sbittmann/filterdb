@@ -45,7 +45,7 @@ describe("VirtualDatabase (class)", () => {
                     return db.table("test");
                 });
 
-            expect(table[0]).to.be.equal(undefined);
+            expect(table[0]).to.be.eql({});
         });
         it("should not allow empty name", async () => {
             await shouldThrow(async () => {

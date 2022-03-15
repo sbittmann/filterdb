@@ -37,14 +37,6 @@ describe("Database (class)", () => {
             let dbDir = await fs.readdir(`./storage/${dbname}`);
             expect(dbDir).to.have.lengthOf.greaterThan(0);
         });
-        it("should upgrade db without errors", async () => {
-            let data = db.meta();
-            data.version = "0.0.1";
-            await db._db.put("meta", data);
-
-            await db.close();
-            db = await new Database(dbname);
-        });
     });
 
     describe(".table(name)", () => {

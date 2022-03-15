@@ -8,4 +8,15 @@ let db = await new Database("documentGenerator", {
         }),
     ],
 });
-//await db.table("documents").save({ test: true });
+
+await db.table("documents").save({ test: true });
+
+let result = await db.table("documents").find((l) => {
+    return name;
+});
+
+console.log(result);
+console.log(result.getQuery());
+
+await db.close();
+await db.delete();
