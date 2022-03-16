@@ -4,7 +4,7 @@ import fs from "fs/promises";
 import { expect } from "chai";
 
 let dbname = "backupTest";
-/*
+
 describe("Backup (class)", () => {
     let db;
     let id;
@@ -48,4 +48,3 @@ describe("Backup (class)", () => {
         });
     });
 });
-*/

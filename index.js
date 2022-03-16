@@ -1,7 +1,7 @@
 import Database from "./lib/Database.js";
 import Server from "./plugins/Server.js";
 
-let db = await new Database("documentGenerator", {
+let db = await new Database("testIndex", {
     plugins: [
         new Server({
             port: 8080,
@@ -9,14 +9,19 @@ let db = await new Database("documentGenerator", {
     ],
 });
 
-await db.table("documents").save({ test: true });
+let tableName = "documents";
 
-let result = await db.table("documents").find((l) => {
-    return name;
+await db.table(tableName).ensureIndex("name");
+await db.table(tableName).ensureIndex("test");
+
+let id = await db.table(tableName).save({ title: "Mr." });
+let id2 = await db.table(tableName).save({ title: "" });
+
+await db.table(tableName).ensureIndex("title");
+
+let data = await db.table(tableName).filter((row) => {
+    return row.title === "Mr.";
 });
 
-console.log(result);
-console.log(result.getQuery());
-
-await db.close();
 await db.delete();
+await db.close();
