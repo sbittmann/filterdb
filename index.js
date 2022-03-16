@@ -19,9 +19,6 @@ let id2 = await db.table(tableName).save({ title: "" });
 
 await db.table(tableName).ensureIndex("title");
 
-let data = await db.table(tableName).filter((row) => {
-    return row.title === "Mr.";
-});
+let r = await db.table(tableName).find((row) => row.title == "Mr.");
 
-await db.delete();
-await db.close();
+console.log(r);

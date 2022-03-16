@@ -1,5 +1,4 @@
 import Database from "../lib/Database.js";
-import Backup from "../lib/Backup.js";
 import fs from "fs/promises";
 import { expect } from "chai";
 
@@ -42,7 +41,6 @@ describe("Backup (class)", () => {
 
         it("should create BackUp with data", async () => {
             let data = await backup.table("test").get(id);
-            console.log(id, data);
             expect(data).to.be.a("object");
             expect(data.backUpTest).to.be.equal(true);
         });
