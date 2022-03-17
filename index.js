@@ -11,14 +11,15 @@ let db = await new Database("testIndex", {
 
 let tableName = "documents";
 
-await db.table(tableName).ensureIndex("name");
 await db.table(tableName).ensureIndex("test");
+await db.table(tableName).ensureIndex("name");
 
-let id = await db.table(tableName).save({ title: "Mr." });
-let id2 = await db.table(tableName).save({ title: "" });
+let id = await db.table(tableName).save({ name: "Max Mustermann" });
+let id2 = await db.table(tableName).save({ test: false });
 
-await db.table(tableName).ensureIndex("title");
-
-let r = await db.table(tableName).find((row) => row.title == "Mr.");
+let r = await db.table(tableName).filter((row) => {
+    return row.nested.nested.not.there;
+});
 
 console.log(r);
+console.dir(r.getQuery(), { depth: null });

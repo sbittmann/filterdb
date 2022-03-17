@@ -27,12 +27,7 @@ describe("Server (plugin)", () => {
         await db.table("persons").save({ name: "Max Mustermann" });
     });
     after(async () => {
-        try {
-            await db.delete();
-            await fs.rm(`./storage/${dbname}`, {
-                recursive: true,
-            });
-        } catch {}
+        await db.delete();
     });
 
     describe("/meta", () => {

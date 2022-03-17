@@ -267,6 +267,7 @@ describe("Table (class)", () => {
 
             await shouldThrow(async () => {
                 let result = await db.table(tableName).find(`(l) => { return l.throwTest === true && l.nested.nested.not.there === false}`);
+                console.dir(result.getQuery(), { depth: null });
             });
         });
 
