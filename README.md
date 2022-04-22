@@ -233,8 +233,8 @@ import Cluster from "filterdb/plugins/Cluster";
 -   [x] authentication
 -   [ ] CI Failing on Backup but no problems on win32 tests
 -   [ ] add Simple sort syntax maybe something like this: `db.table().find(row => row.name == "test").sort(row => row.status, 1)`
--   [ ] performance optimization
--   [ ] remove thread.js and create own ThreadPool due to stability
+-   [x] performance optimization
+-   [x] remove thread.js and create own ThreadPool due to stability
 -   [ ] CLI-Interface
 -   [ ] REPL-Interface
 
