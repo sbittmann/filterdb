@@ -2,6 +2,7 @@ language: node_js
 node_js:
     - 16
     - 17
+    - 18
 script: npm run ci
 after_script:
-  - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash)
