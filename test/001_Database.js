@@ -87,7 +87,7 @@ describe("Database (class)", () => {
             db = await new Database(dbname);
         });
     });
-    describe(".delete()", () => {
+    /*describe(".delete()", () => {
         before(async () => {
             await db.delete();
         });
@@ -107,5 +107,5 @@ describe("Database (class)", () => {
                 await fs.readdir(`./storage/${dbname}`);
             });*/
         });
-    });
+    });*/
 });
