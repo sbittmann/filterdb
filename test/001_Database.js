@@ -103,9 +103,9 @@ describe("Database (class)", () => {
             });
         });
         it("should delete database files", async () => {
-            /*await shouldThrow(async () => {
+            await shouldThrow(async () => {
                 await fs.readdir(`./storage/${dbname}`);
-            });*/
+            });
         });
     });*/
 });
