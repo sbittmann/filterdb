@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import cors from "fastify-cors";
+import cors from "@fastify/cors";
 import { actionTypes } from "../lib/utils.js";
 
 export default class Server {
@@ -69,13 +69,18 @@ export default class Server {
         });
 
         await new Promise((res, rej) => {
-            this.#server.listen(this.#port, (err, address) => {
-                if (err) {
-                    rej(err);
-                    return;
-                }
-                res();
-            });
+            this.#server.listen(
+                {
+                    port: this.#port,
+                },
+                (err, address) => {
+                    if (err) {
+                        rej(err);
+                        return;
+                    }
+                    res();
+                },
+            );
         });
     }
     stop() {
